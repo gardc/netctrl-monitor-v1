@@ -1,0 +1,27 @@
+{
+  "name": "monitor",
+  "wailsjsdir": "./frontend",
+  "version": "2",
+  "Path": "",
+  "BuildDir": "",
+  "outputfilename": "netctrl-monitor.exe",
+  "OutputType": "",
+  "Platform": "",
+  "runNonNativeBuildHooks": false,
+  "postBuildHooks": null,
+  "Author": {
+    "name": "gardc",
+    "email": "gard@cappelendigital.no"
+  },
+  "Info": {
+    "companyName": "NetCTRL AS",
+    "productName": "Monitor",
+    "productVersion": "1.0.0",
+    "copyright": "Copyright NetCTRL AS",
+    "comments": "Built using Wails (https://wails.app)"
+  },
+  "debounceMS": 100,
+  "devserverurl": "http://localhost:34115",
+  "appargs": "",
+  "nsisType": ""
+}

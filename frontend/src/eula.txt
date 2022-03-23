@@ -1,0 +1,55 @@
+NetCTRL Monitor Desktop App
+End User License Agreement
+IMPORTANT - READ CAREFULLY BEFORE DOWNLOADING, INSTALLING OR USING THE NETCTRL MONITOR DESKTOP APP (THE "SOFTWARE").
+
+This End-User License Agreement ("EULA" or "Agreement") is a binding legal agreement between you ("You") and NetCTRL AS (the "Company" or "NetCTRL") , which sets forth the terms and conditions under which you are licensed to use the Software being distributed with this EULA.
+
+Your right to use the Software is subject to your agreement to be bound by the terms and conditions of this Agreement. By clicking the "I agree" checkbox end of the Agreement and installing and/or using the Software, you acknowledge your acceptance of the Agreement. If you do not agree to these terms and conditions, do not click the "I agree" checkbox and do not download,install or use the Software.
+
+1. Introduction
+
+The Software licensed hereunder constitutes part of the "Services" offered by NetCTRL at https://netctrl.io/. Your installation and use of the Software is subject to your compliance with this Agreement and NetCTRL.io’s Terms of Service at https://netctrl.io/legal/siteTerms (the "Website Terms of Service"). For purposes of this Agreement, "Software" means NetCTRL's proprietary software program for monitoring and controlling your network, together with any upgrades, modifications, corrections or enhancements, software program documentation, or related information or materials that may be made available by NetCTRL pursuant to this Agreement; and "You" or Your" refers to the individual or entity that has agreed to use the Software in accordance with the terms and conditions of this Agreement and NetCTRL's Website Terms of Service.
+
+2. License
+
+2.1. License to You. Subject to and conditioned upon your compliance with this Agreement and NetCTRL's Website Terms of Service, NetCTRL hereby grants You, for the term of this Agreement, a personal, non-exclusive, non-transferable, non-sub-licensable, royalty-free license to download, install and use the Software, in object code form, on a computer owned or controlled by you for the sole purpose of enabling you to monitor and control devices connected to your network, which is also owned or controlled by you, in connection with your use of the Services in the manner permitted by this Agreement and NetCTRL's Website Terms of Service. The Software contains valuable trade secrets and is proprietary and confidential to NetCTRL. You do not have the right to, and You will not, provide, disclose, or otherwise make available the Software to any person or entity.
+
+2.2. License to NetCTRL. You grant to NetCTRL and its contractors an irrevocable, royalty-free, worldwide license to access, use, modify, and delete any information, materials, data, files, programs, ideas and opinions provided or made available by You ("Your Content") through the use of Software for the sole purpose of synchronizing the services made available through the Software with the services made available through the Website and to authenticate you as a user.
+
+2.3. Copies. You may make one copy of the Software solely for archival purposes and one copy for backup purposes. All copies of the Software will be the exclusive property of NetCTRL and subject to the terms and conditions of this Agreement.
+
+2.4. Further Restrictions. The license granted in Section 2.1 is expressly made subject to and conditioned upon the following limitations and restrictions: You may not (a) use or reproduce the Software beyond the scope of the license granted in this Section 2; (b) disclose, publish, sublicense, distribute or otherwise make available the Software to any third party or permit others to use the same, except as expressly permitted in Section 3; (c) remove, alter or otherwise obscure any copyright, trademark or other proprietary or restrictive notice or legend on or within the Software (or copies thereof made in accordance with this Agreement); (d) modify, alter, translate or otherwise create derivative works of the Software; (e) except as and only to the extent such activity is expressly permitted by applicable law notwithstanding this provision, decompile, disassemble or otherwise reverse engineer or attempt to deconstruct or discover any source code or underlying ideas or algorithms of the Software; (f) assign, rent, lease, sell or otherwise transfer (whether by contract, operation of law or otherwise) the Software; and (g) use the Software with malicious intent, or use the Software on property you do not own or control (e.g. computers, networks or devices).
+
+2. 5. Reserved Rights. The Software is licensed, not sold to you. All rights not expressly granted to You herein are reserved by NetCTRL and/or its licensors. You agree that You shall not use or copy the Software except as expressly authorized in this Agreement.
+
+2.6. No Implied License. Nothing in this Agreement shall be construed as granting You any right, license or immunity under any intellectual property right of NetCTRL by implication, estoppel or otherwise, except as expressly set forth in this Agreement.
+
+3. Ownership
+
+NetCTRL retains sole and exclusive ownership of the Software, including all patent, copyright, trademark, trade secret and other intellectual property rights therein. You acquire no rights in the Software, except as expressly provided in this Agreement.
+
+4. Term and Termination
+
+This license granted to you hereunder is effective until terminated by either party for any reason. You may terminate this Agreement at any time by destroying all copies of the Software. Your right to use the Software will terminate immediately and automatically, without any notice from NetCTRL, in the event that you fail to comply with any of the terms and conditions of this Agreement or the Website Terms of Service. Promptly upon termination, you must cease all use of the Software and destroy all copies of the Software in your possession or control. Termination will not limit any of NetCTRL's other rights or remedies at law or in equity. Sections 2.2, 2.5, 2.6, 3, 4, 6, 7, 8 and 9 shall survive termination or expiration of this license for any reason.
+
+5. Software Updates; Changes. NetCTRL reserves the right, in its sole discretion, to make unscheduled deployments of updates or enhancements to the Software. Customer acknowledges and understands that during such deployments, certain functionality of the Software may be unavailable and outages may occur. NetCTRL may also modify, replace, refuse access to, suspend or discontinue the Software or change the terms and conditions of the license to the Software, partially or entirely at any time in our sole discretion.
+
+6. Warranty Disclaimer
+
+THE SOFTWARE IS PROVIDED BY NETCTRL TO YOU "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING, WITHOUT LIMITATION, ANY IMPLIED WARRANTY OF NON-INFRINGEMENT, MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE. WITHOUT LIMITING THE GENERALITY OF THE FOREGOING, NetCTRL MAKES NO REPRESENTATION OR WARRANTY REGARDING THE FUNCTIONALITY, RELIABILITY OR PERFORMANCE OF THE SOFTWARE, OR THE RESULTS TO BE OBTAINED THROUGH THE USE OF THE SOFTWARE, OR THAT THE OPERATION OF THE SOFTWARE SHALL BE UNINTERRUPTED OR ERROR-FREE. SOME STATES DO NOT ALLOW THE DISCLAIMER OF IMPLIED WARRANTIES SO THE FOREGOING DISCLAIMER OF IMPLIED WARRANTIES MAY NOT APPLY TO YOU.
+
+7. Exclusion of Damages; Limitation of Liability
+
+7.1 TO THE FULLEST EXTENT PERMITTED BY LAW, IN NO EVENT SHALL NETCTRL, ITS OFFICERS, DIRECTORS, EMPLOYEES, OR AGENTS, BE LIABLE TO YOU OR ANY THIRD PARTY FOR ANY INDIRECT, SPECIAL, INCIDENTAL, CONSEQUENTIAL, EXEMPLARY OR PUNITIVE DAMAGES, OR DAMAGES FOR LOSS OF PROFITS, DATA, USE OR BUSINESS, ARISING OUT OF OR IN CONNECTION WITH THIS AGREEMENT OR THE SOFTWARE, EVEN IF NETCTRL HAS BEEN ADVISED OF OR SHOULD HAVE FORESEEN THE POSSIBILITY OF SUCH DAMAGES OR LOSSES.
+
+7.2 IN NO EVENT SHALL NETCTRL'S TOTAL AND AGGREGATE LIABILITY TO YOU FOR ALL DAMAGES, LOSSES AND CAUSES OF ACTION ARISING OUT OF OR RELATED TO THIS AGREEMENT OR THE SOFTWARE EXCEED THE AMOUNT PAID BY YOU TO NETCTRL, IF ANY, FOR THE SOFTWARE.
+
+7.3 THE EXCLUSION OF DAMAGES AND LIMITATION OF LIABILITY SET FORTH IN THIS SECTION 7 SHALL APPLY REGARDLESS OF THE FORM OF ACTION, WHETHER THE ASSERTED LIABILITY OR DAMAGES ARE BASED ON CONTRACT (INCLUDING, WITHOUT LIMITATION, BREACH OF WARRANTY), INDEMNIFICATION, TORT (INCLUDING, WITHOUT LIMITATION, NEGLIGENCE), STATUTE OR ANY OTHER LEGAL OR EQUITABLE THEORY. SOME JURISDICTIONS DO NOT ALLOW THE LIMITATION OR EXCLUSION OF LIABILITY FOR INCIDENTAL OR CONSEQUENTIAL DAMAGES SO SOME OF THE ABOVE LIMITATIONS MAY NOT APPLY TO YOU.
+
+8. Governing Law.
+
+This Agreement and all matters arising out of or relating to this Agreement is governed by and interpreted following the laws of Norway, and the use of the United Nations Convention of Contracts for the International Sale of Goods is expressly excluded. If your habitual residence is in the EU, and you are a consumer, you additionally possess the protection provided to you by obligatory provisions of the law of your country of residence. NetCTRL and yourself both agree to submit to the non-exclusive jurisdiction of the courts of Rogaland, which means that you may make a claim to defend your consumer protection rights in regards to these Conditions of Use in Norway, or in the EU country in which you reside.
+
+9. General.
+
+The failure of NetCTRL to exercise or enforce any right or provision of this Agreement shall not constitute a waiver of such right or provision. If any provision of this Agreement is found by a court of competent jurisdiction to be invalid, unlawful, void, or for any reason unenforceable, then that provision will be deemed severable from this Agreement; you agree that the court should endeavor to give effect to the intentions of NetCTRL and You as reflected in the provision, and that the other provisions of this Agreement shall remain in full force and effect. This Agreement, and any rights and licenses granted hereunder, may not be assigned or transferred by you, in whole or in part, whether voluntarily or by operation of law, without the prior written consent of NetCTRL (and any attempt to do so shall be null and void). This Agreement, and any rights and licenses granted hereunder, may be assigned or transferred by NetCTRL without restriction and without your consent. This Agreement and NetCTRL's Website Terms of Service constitute the final, complete and exclusive statement of the agreement between you and NetCTRL regarding the subject matter hereof, and supersede any prior agreements, negotiations or communications between you and NetCTRL with respect to such subject matter.

@@ -1,0 +1,35 @@
+@import url('https://fonts.googleapis.com/css2?family=Azeret+Mono&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Ubuntu+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Scrollbar :*/
+/* width */
+::-webkit-scrollbar {
+    width: 8px;
+    background: #424242;
+    /* border-bottom-right-radius: 0.75rem;
+    border-top-right-radius: 0.75rem; */
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #313131;
+    /* border-bottom-right-radius: 0.75rem;
+    border-top-right-radius: 0.75rem; */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #4f4f4f;
+    /* border-bottom-right-radius: 0.75rem;
+    border-top-right-radius: 0.75rem; */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #626262;
+    /* border-bottom-right-radius: 0.75rem;
+    border-top-right-radius: 0.75rem; */
+}
