@@ -78,57 +78,62 @@ const LoginPage = () => {
     };
   }, [vantaEffect]);
 
-  function signIn({ email, password, hostname, machineId, machineOs }) {
+  async function signIn({ email, password, hostname, machineId, machineOs }) {
     setLoading(true);
     console.log("machine OS:", machineOs);
-    unauthedFetch(`${remoteUrlBase()}/api/monitorClient/signIn`, {
-      body: {
-        email: email,
-        password: password,
-        machine: {
-          name: hostname,
-          id: machineId,
-          os: machineOs,
-        },
-      },
-      method: "POST",
-    })
-      .then((r) => {
-        console.log("login response: ", r);
-        if (r.status === 200) {
-          console.log("login response JSON: ", r);
-          dispatch(setUserEmail(r.data.email));
-          dispatch(setToken(r.data.token));
-          dispatch(setProUser(r.data.proUser));
-          navigate("/main/network/");
-        } else if (r.status === 500) {
-          setLoginMsg(
-            "There was a server error trying to sign in. Please contact support if this error persists."
-          );
-        } else {
-          console.log("Login response error message: ", r.data.message);
-          if (r.data.message !== undefined) {
-            setLoginMsg(r.data.message);
-          } else {
-            setLoginMsg(
-              "Could not sign in. Check that your email and password is correct, or contact support."
-            );
-          }
+    try {
+      // Fetch login
+      const r = await unauthedFetch(
+        `${remoteUrlBase()}/api/monitorClient/signIn`,
+        {
+          body: {
+            email: email,
+            password: password,
+            machine: {
+              name: hostname,
+              id: machineId,
+              os: machineOs,
+            },
+          },
+          method: "POST",
         }
-        setLoading(false);
-      })
-      .catch((e) => {
-        console.error(
-          "error trying to fetch login with base url",
-          remoteUrlBase(),
-          ": ",
-          e
-        );
+      );
+      const data = await r.json();
+      console.log("login response: ", r);
+      console.log("login response json: ", data);
+      if (r.status === 200) {
+        console.log("login response JSON: ", r);
+        dispatch(setUserEmail(data.email));
+        dispatch(setToken(data.token));
+        dispatch(setProUser(data.proUser));
+        navigate("/main/network/");
+      } else if (r.status === 500) {
         setLoginMsg(
-          "There was an error signing in. Please check your internet connection, or contact support if this issue persists."
+          "There was a server error trying to sign in. Please contact support if this error persists."
         );
-        setLoading(false);
-      });
+      } else {
+        console.log("Login response error message: ", data.message);
+        if (data.message !== undefined) {
+          setLoginMsg(data.message);
+        } else {
+          setLoginMsg(
+            "Could not sign in. Check that your email and password is correct, or contact support."
+          );
+        }
+      }
+      setLoading(false);
+    } catch (e) {
+      console.error(
+        "error trying to fetch login with base url",
+        remoteUrlBase(),
+        ": ",
+        e
+      );
+      setLoginMsg(
+        "There was an error signing in. Please check your internet connection, or contact support if this issue persists."
+      );
+      setLoading(false);
+    }
   }
 
   const handleSubmit = (event) => {
@@ -143,7 +148,7 @@ const LoginPage = () => {
       localStorage.setItem("password", "");
       localStorage.setItem("rememberMe", "false");
     }
-    signIn({ email, password, hostname, machineId, machineOs });
+    signIn({ email, password, hostname, machineId, machineOs }).then();
   };
 
   return (
@@ -226,7 +231,9 @@ const LoginPage = () => {
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();
-                  window.runtime.BrowserOpenURL(`${remoteUrlBase()}/auth/sendPasswordReset`);
+                  window.runtime.BrowserOpenURL(
+                    `${remoteUrlBase()}/auth/sendPasswordReset`
+                  );
                 }}
                 className="text-gray-300 hover:underline cursor-pointer focus:underline hover:text-red-500 transition focus:outline-none"
               >

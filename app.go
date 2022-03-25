@@ -9,6 +9,7 @@ import (
 // App struct
 type App struct {
 	ctx context.Context
+	JWT string
 }
 
 // NewApp creates a new App application struct
