@@ -1,88 +1,72 @@
-function sendToNS(unserializedData) {
-  // const current = getCurrent();
-  // current.emit("to_ns", JSON.stringify(unserializedData)).then();
+import rStore from "../../redux/store";
+import { setPcapInitialized } from "../../redux/slices/nsSettings";
+
+const store = rStore;
+
+export function block(device, iface, gateway, blockSleepSeconds) {
+  window.go.main.App.Poison({
+    targetIp: device.ip,
+    targetMac: device.mac,
+    localIface: iface,
+    gatewayMac: gateway.mac,
+    gatewayIp: gateway.ip,
+    blockSleepSeconds,
+  }).then();
 }
 
-export function block(device, iface, gateway, blockSleepSeconds, jwt) {
-  // sendToNS({
-  //   type: "block",
-  //   data: {
-  //     targetIp: device.ip,
-  //     targetMac: device.mac,
-  //     localIface: iface,
-  //     gatewayMac: gateway.mac,
-  //     gatewayIp: gateway.ip,
-  //     blockSleepSeconds,
-  //     jwt,
-  //   },
-  // });
+export function unblock(device, iface, gateway) {
+  window.go.main.App.StopPoison({
+    targetIp: device.ip,
+    targetMac: device.mac,
+    localIface: iface,
+    gatewayMac: gateway.mac,
+    gatewayIp: gateway.ip,
+  }).then();
 }
-export function unblock(device, iface, gateway, jwt) {
-  // sendToNS({
-  //   type: "unblock",
-  //   data: {
-  //     targetIp: device.ip,
-  //     targetMac: device.mac,
-  //     localIface: iface,
-  //     gatewayMac: gateway.mac,
-  //     gatewayIp: gateway.ip,
-  //     jwt: jwt,
-  //   },
-  // });
+
+export function scan(iface, ipnet, scanTimeout) {
+  window.go.main.App.Scan(iface, ipnet, scanTimeout).then();
 }
-export function scan(iface, ipnet, scanTimeout, jwt) {
-  // console.log("received ipnet in scan:", ipnet);
-  // sendToNS({
-  //   type: "scan",
-  //   data: {
-  //     localIface: iface,
-  //     localIpnet: ipnet,
-  //     scanTimeoutSeconds: scanTimeout,
-  //     jwt,
-  //   },
-  // });
+
+export async function getDefaultLocalIp() {
+  return await window.go.main.App.GetDefaultLocalIP();
 }
-export function getDefaultLocalIp() {
-  // sendToNS({
-  //   type: "getDefaultLocalIp",
-  //   data: {},
-  // });
+
+export async function getIpNetFromIp(ip) {
+  return await window.go.main.App.GetIPNetFromIP(ip);
 }
-export function getIpNetFromIp(ip) {
-  // sendToNS({
-  //   type: "getIpNetFromIp",
-  //   data: {
-  //     ip,
-  //   },
-  // });
+
+export async function getIfaceFromIp(ip) {
+  return await window.go.main.App.GetIfaceFromIP(ip);
 }
-export function getIfaceFromIp(ip) {
-  // sendToNS({
-  //   type: "getIfaceFromIp",
-  //   data: {
-  //     ip,
-  //   },
-  // });
+
+export async function getGatewayIp() {
+  return await window.go.main.App.GetGatewayIP();
 }
-export function getGatewayIp() {
-  // sendToNS({
-  //   type: "getGatewayIp",
-  //   data: {},
-  // });
+
+export async function getGatewayMac(gatewayIp) {
+  return await window.go.main.App.LookupARPTable(gatewayIp);
 }
-export function getGatewayMac(gatewayIp) {
-  // sendToNS({
-  //   type: "getGatewayMac",
-  //   data: {
-  //     gatewayIp,
-  //   },
-  // });
+
+export async function initBackend() {
+  const localIp = await getDefaultLocalIp();
+  const gatewayIp = await getGatewayIp();
+  const gatewayMac = await getGatewayMac(gatewayIp);
+  const localIpNet = await getIpNetFromIp(localIp);
+  const localIface = await getIfaceFromIp(localIp);
+  window.go.main.App.InitializePcap(localIface).then(async () => {
+    console.log(
+      "Init values: ",
+      localIp,
+      gatewayIp,
+      gatewayMac,
+      localIpNet,
+      localIface
+    );
+    store.dispatch(setPcapInitialized(true));
+  });
 }
-export function initPcap(iface) {
-  // sendToNS({
-  //   type: "initPcap",
-  //   data: {
-  //     iface,
-  //   },
-  // });
+
+export function setJWT(jwt) {
+  window.go.main.App.SetJWT(jwt).then();
 }

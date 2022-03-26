@@ -16,7 +16,6 @@ const NetworkPage = () => {
   const isScanning = useSelector((state) => state.scan.isScanning);
   const devices = useSelector((state) => state.scan.devices);
   const nsSettings = useSelector((state) => state.ns.settings);
-  const token = useSelector((state) => state.user.token);
   const pcapInitialized = useSelector((state) => state.ns.pcapInitialized);
   const dispatch = useDispatch();
 
@@ -28,7 +27,6 @@ const NetworkPage = () => {
       nsSettings.localIface,
       nsSettings.localIpNet,
       nsSettings.scanTimeoutSeconds,
-      token
     );
     dispatch(setIsScanning(true));
   };

@@ -12,6 +12,7 @@ import {
 } from "../redux/slices/userSlice";
 import { unauthedFetch } from "../lib/fetcher";
 import EulaModal from "../Components/EulaModal";
+import {setJWT} from "../services/ns/nsFunctions";
 
 const LoginPage = () => {
   const [vantaEffect, setVantaEffect] = useState(0);
@@ -105,6 +106,7 @@ const LoginPage = () => {
         console.log("login response JSON: ", r);
         dispatch(setUserEmail(data.email));
         dispatch(setToken(data.token));
+        setJWT(data.token);
         dispatch(setProUser(data.proUser));
         navigate("/main/network/");
       } else if (r.status === 500) {

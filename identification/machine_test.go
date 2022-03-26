@@ -1,7 +1,7 @@
 package identification_test
 
 import (
-	"changeme/identification"
+	"netctrl.io/monitor/identification"
 	"testing"
 )
 

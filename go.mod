@@ -1,9 +1,13 @@
-module changeme
+module netctrl.io/monitor
 
 go 1.17
 
 require (
 	github.com/denisbrodbeck/machineid v1.0.1
+	github.com/gardc/go-ouitools v0.0.0-20210908233849-993b99353f02
+	github.com/google/gopacket v1.1.19
+	github.com/jackpal/gateway v1.0.7
+	github.com/mostlygeek/arp v0.0.0-20170424181311-541a2129847a
 	github.com/wailsapp/wails/v2 v2.0.0-beta.33
 )
 
@@ -21,11 +25,11 @@ require (
 	github.com/klauspost/compress v1.12.2 // indirect
 	github.com/leaanthony/go-ansi-parser v1.0.1 // indirect
 	github.com/leaanthony/go-common-file-dialog v1.0.3 // indirect
-	github.com/leaanthony/go-webview2 v1.0.3-0.20220125181555-00f20a61c17d // indirect
+	github.com/leaanthony/go-webview2 v1.0.3-0.20220314105146-f44268990abe // indirect
 	github.com/leaanthony/gosod v1.0.3 // indirect
 	github.com/leaanthony/slicer v1.5.0 // indirect
 	github.com/leaanthony/typescriptify-golang-structs v0.1.7 // indirect
-	github.com/leaanthony/winc v0.0.0-20220208061147-37b059b9dc3b // indirect
+	github.com/leaanthony/winc v0.0.0-20220323084916-ea5df694ec1f // indirect
 	github.com/pkg/browser v0.0.0-20210706143420-7d21f8c997e2 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/savsgio/gotils v0.0.0-20200117113501-90175b0fbe3f // indirect
@@ -37,4 +41,4 @@ require (
 	golang.org/x/sys v0.0.0-20220114195835-da31bd327af9 // indirect
 )
 
-// replace github.com/wailsapp/wails/v2 v2.0.0-beta.33 => C:\Users\dev\go\pkg\mod\github.com\wailsapp\wails\v2@v2.0.0-beta.33
+replace github.com/wailsapp/wails/v2 => E:\dev\wails\v2

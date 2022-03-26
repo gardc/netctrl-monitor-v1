@@ -35,7 +35,6 @@ const TargetPopup = ({ device, open, setOpen }) => {
       nsSettings.localIface,
       nsSettings.gateway,
       nsSettings.blockSleepSeconds,
-      token
     );
     dispatch(setIsBlocking(true));
   };

@@ -10,10 +10,11 @@ import monitor from "../assets/MONITOR.svg";
 import ErrorModal from "../Components/ErrorModal";
 import PasswordPopup from "../Components/PasswordPopup";
 import { setError } from "../redux/slices/nsSettings";
-import { setupNs } from "../services/ns/nsService";
+import { setupListeners } from "../services/ns/nsService";
 import NetworkPage from "./Network";
 import SettingsPage from "./Settings";
 import UserPage from "./User";
+import { initBackend } from "../services/ns/nsFunctions";
 
 const Sidebar = (props) => {
   // Sidebar backdrop blur removed due to not working correctly on windows, and draining CPU time
@@ -23,7 +24,7 @@ const Sidebar = (props) => {
       className="fixed z-20 whitespace-nowrap overflow-x-hidden transition-all duration-75 w-24 hover:w-64 border-r border-gray-700 pt-12 h-full top-0 left-0 bg-gray-900 flex flex-col items-center justify-between select-none"
       onMouseEnter={() => props.setSidebarOpen(true)}
       onMouseLeave={() => props.setSidebarOpen(false)}
-      data-tauri-drag-region=""
+      wails-drag-region=""
     >
       <div className="flex flex-col justify-center items-center">
         {props.sidebarOpen ? (
@@ -110,7 +111,8 @@ const MainView = () => {
 
   // Setup NS
   useEffect(() => {
-    setupNs().then();
+    setupListeners();
+    initBackend();
   }, []);
 
   useEffect(() => {
@@ -179,10 +181,7 @@ const MainView = () => {
         setCurrPage={setCurrPage}
         quit={quit}
       />
-      <div
-        className="pl-24 bg-gray-800 h-full w-screen overflow-x-hidden select-none"
-        // data-tauri-drag-region=""
-      >
+      <div className="pl-24 bg-gray-800 h-full w-screen overflow-x-hidden select-none">
         <div
           className={
             "z-10 absolute top-0 left-0 w-screen h-screen pointer-events-none backdrop-filter transition-all" +

@@ -23,11 +23,6 @@ import {
 
 const store = rStore;
 
-// Note: be careful to check if system needs special permissions first.
-export const spawnNs = async () => {
-  // await invoke("spawn_ns");
-};
-
 export const checkPermsAndSpawnNs = () => {
   // const current = getCurrent();
   // current.emit("kill_ns", "").then();
@@ -49,10 +44,7 @@ export const checkPermsAndSpawnNs = () => {
   // });
 };
 
-export const setupNs = async () => {
-  // const current = getCurrent();
-  // checkPermsAndSpawnNs();
-
+export const setupListeners = () => {
   // await current.listen("ns_fatal_error", (event) => {
   //   store.dispatch(addFatalErrorLine(event.payload));
   //   console.log("Fatal error: ", event.payload);
@@ -116,4 +108,11 @@ export const setupNs = async () => {
   //   store.dispatch(addFatalErrorLine(event.payload));
   //   console.error("Failed to spawn NS: ", event.payload);
   // });
+  window.runtime.EventsOn("scanResult", (r) => {
+    console.log(r);
+    store.dispatch(addDevice(r));
+  });
+  window.runtime.EventsOn("scanDone", () => {
+    store.dispatch(setIsBlocking(false));
+  });
 };

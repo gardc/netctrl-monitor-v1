@@ -5,6 +5,36 @@ const go = {
   "main": {
     "App": {
       /**
+       * GetDefaultLocalIP
+       * @returns {Promise<models.IP>}  - Go Type: net.IP
+       */
+      "GetDefaultLocalIP": () => {
+        return window.go.main.App.GetDefaultLocalIP();
+      },
+      /**
+       * GetGatewayIP
+       * @returns {Promise<models.IP>}  - Go Type: net.IP
+       */
+      "GetGatewayIP": () => {
+        return window.go.main.App.GetGatewayIP();
+      },
+      /**
+       * GetIPNetFromIP
+       * @param {models.IP} arg1 - Go Type: net.IP
+       * @returns {Promise<models.IPNet>}  - Go Type: net.IPNet
+       */
+      "GetIPNetFromIP": (arg1) => {
+        return window.go.main.App.GetIPNetFromIP(arg1);
+      },
+      /**
+       * GetIfaceFromIP
+       * @param {models.IP} arg1 - Go Type: net.IP
+       * @returns {Promise<models.Interface>}  - Go Type: net.Interface
+       */
+      "GetIfaceFromIP": (arg1) => {
+        return window.go.main.App.GetIfaceFromIP(arg1);
+      },
+      /**
        * GetMachineHostname
        * @returns {Promise<string>}  - Go Type: string
        */
@@ -32,6 +62,70 @@ const go = {
        */
       "Greet": (arg1) => {
         return window.go.main.App.Greet(arg1);
+      },
+      /**
+       * InitializePcap
+       * @param {models.Interface} arg1 - Go Type: net.Interface
+       * @returns {Promise<void>} 
+       */
+      "InitializePcap": (arg1) => {
+        return window.go.main.App.InitializePcap(arg1);
+      },
+      /**
+       * LookupARPTable
+       * @param {models.IP} arg1 - Go Type: net.IP
+       * @returns {Promise<models.HardwareAddr>}  - Go Type: net.HardwareAddr
+       */
+      "LookupARPTable": (arg1) => {
+        return window.go.main.App.LookupARPTable(arg1);
+      },
+      /**
+       * Poison
+       * @param {models.PoisonParams} arg1 - Go Type: main.PoisonParams
+       * @returns {Promise<void>} 
+       */
+      "Poison": (arg1) => {
+        return window.go.main.App.Poison(arg1);
+      },
+      /**
+       * Scan
+       * @param {models.Interface} arg1 - Go Type: net.Interface
+       * @param {models.IPNet} arg2 - Go Type: net.IPNet
+       * @param {number} arg3 - Go Type: int
+       * @returns {Promise<void>} 
+       */
+      "Scan": (arg1, arg2, arg3) => {
+        return window.go.main.App.Scan(arg1, arg2, arg3);
+      },
+      /**
+       * SetJWT
+       * @param {string} arg1 - Go Type: string
+       * @returns {Promise<void>} 
+       */
+      "SetJWT": (arg1) => {
+        return window.go.main.App.SetJWT(arg1);
+      },
+      /**
+       * StartListening
+       * @returns {Promise<void>} 
+       */
+      "StartListening": () => {
+        return window.go.main.App.StartListening();
+      },
+      /**
+       * StopPoison
+       * @param {models.PoisonParams} arg1 - Go Type: main.PoisonParams
+       * @returns {Promise<void>} 
+       */
+      "StopPoison": (arg1) => {
+        return window.go.main.App.StopPoison(arg1);
+      },
+      /**
+       * StopScan
+       * @returns {Promise<void>} 
+       */
+      "StopScan": () => {
+        return window.go.main.App.StopScan();
       },
     },
   },
