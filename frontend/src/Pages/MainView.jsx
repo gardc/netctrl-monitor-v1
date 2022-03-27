@@ -146,8 +146,7 @@ const MainView = () => {
   };
 
   const quit = () => {
-    // TODO: add exit functionality
-    //appWindow.close().catch();
+    window.go.main.App.Quit().then();
   };
 
   return (

@@ -3,11 +3,13 @@ module netctrl.io/monitor
 go 1.17
 
 require (
+	github.com/Masterminds/semver v1.5.0
 	github.com/denisbrodbeck/machineid v1.0.1
 	github.com/gardc/go-ouitools v0.0.0-20210908233849-993b99353f02
 	github.com/google/gopacket v1.1.19
 	github.com/jackpal/gateway v1.0.7
 	github.com/mostlygeek/arp v0.0.0-20170424181311-541a2129847a
+	github.com/pkg/browser v0.0.0-20210706143420-7d21f8c997e2
 	github.com/wailsapp/wails/v2 v2.0.0-beta.33
 )
 
@@ -30,7 +32,6 @@ require (
 	github.com/leaanthony/slicer v1.5.0 // indirect
 	github.com/leaanthony/typescriptify-golang-structs v0.1.7 // indirect
 	github.com/leaanthony/winc v0.0.0-20220323084916-ea5df694ec1f // indirect
-	github.com/pkg/browser v0.0.0-20210706143420-7d21f8c997e2 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/savsgio/gotils v0.0.0-20200117113501-90175b0fbe3f // indirect
 	github.com/tkrajina/go-reflector v0.5.5 // indirect

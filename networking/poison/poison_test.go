@@ -29,7 +29,7 @@ func TestPoison(t *testing.T) {
 	}
 	defer handle.Close()
 
-	stop := make(chan struct{})
+	stop := make(chan interface{})
 	c := make(chan os.Signal)
 	signal.Notify(c, os.Kill)
 

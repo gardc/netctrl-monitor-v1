@@ -80,18 +80,18 @@ func TestTimeDuration(t *testing.T) {
 	t.Logf("%v", v)
 }
 
-func TestGetRemoteIPs(t *testing.T) {
-	ip, _ := GetLocalIP()
-	localIPNet := net.IPNet{
-		IP:   ip,
-		Mask: net.CIDRMask(24, 32),
-	}
-	ips, err := GetIPs(localIPNet, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC50ZXN0IiwiaWF0IjoxNjM0NjYxMjEyfQ.2YN_zEnsOzamoX003pIO0hOBnw99Qv8TB_qiZhWDuFI")
-	if err != nil {
-		t.Fatal(err)
-	}
-	t.Logf("IPs received: %v", ips)
-}
+//func TestGetRemoteIPs(t *testing.T) {
+//	ip, _ := GetLocalIP()
+//	localIPNet := net.IPNet{
+//		IP:   ip,
+//		Mask: net.CIDRMask(24, 32),
+//	}
+//	ips, err := GetIPs(localIPNet, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAdGVzdC50ZXN0IiwiaWF0IjoxNjM0NjYxMjEyfQ.2YN_zEnsOzamoX003pIO0hOBnw99Qv8TB_qiZhWDuFI")
+//	if err != nil {
+//		t.Fatal(err)
+//	}
+//	t.Logf("IPs received: %v", ips)
+//}
 
 func TestByteMarshall(t *testing.T) {
 	x := []byte{255, 0, 0, 255, 0, 255, 208, 0}

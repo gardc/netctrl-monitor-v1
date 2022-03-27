@@ -1,32 +1,12 @@
-import { setIsBlocking } from "../../redux/slices/blockSlice";
-import {
-  addFatalErrorLine,
-  askPassword,
-  setError,
-  setGatewayIp,
-  setGatewayMac,
-  setLocalIface,
-  setLocalIp,
-  setLocalIpNet,
-  setPcapInitialized,
-} from "../../redux/slices/nsSettings";
 import { addDevice, setIsScanning } from "../../redux/slices/scanSlice";
 import rStore from "../../redux/store";
-import {
-  getDefaultLocalIp,
-  getGatewayIp,
-  getGatewayMac,
-  getIfaceFromIp,
-  getIpNetFromIp,
-  initPcap,
-} from "./nsFunctions";
+import {setIsBlocking} from "../../redux/slices/blockSlice";
 
 const store = rStore;
 
 export const checkPermsAndSpawnNs = () => {
   // const current = getCurrent();
   // current.emit("kill_ns", "").then();
-
   // // Check permissions and fix 'em for each OS.
   // invoke("get_platform").then((p) => {
   //   if (p === "linux" || p === "macos") {
@@ -113,6 +93,9 @@ export const setupListeners = () => {
     store.dispatch(addDevice(r));
   });
   window.runtime.EventsOn("scanDone", () => {
+    store.dispatch(setIsScanning(false));
+  });
+  window.runtime.EventsOn("blockDone", () => {
     store.dispatch(setIsBlocking(false));
   });
 };

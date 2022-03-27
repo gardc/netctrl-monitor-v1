@@ -23,6 +23,9 @@ const NetworkPage = () => {
     if (!pcapInitialized) {
       return;
     }
+    console.log("localIface:", nsSettings.localIface);
+    console.log("localIpNet:", nsSettings.localIpNet);
+    console.log("scanTimeoutSeconds:", nsSettings.scanTimeoutSeconds);
     scan(
       nsSettings.localIface,
       nsSettings.localIpNet,
@@ -80,10 +83,10 @@ const NetworkPage = () => {
                   onClick={() => clickTarget(x)}
                 >
                   <td className={tableBorderStyle + tableCellStyle}>
-                    <span title="Click to control device">{x.ip}</span>
+                    <span title="Click to control device">{x.ipString}</span>
                   </td>
                   <td className={tableBorderStyle + tableCellStyle}>
-                    <span title="Click to control device">{x.mac}</span>
+                    <span title="Click to control device">{x.macString}</span>
                   </td>
                   <td className={tableBorderStyle + tableCellStyle}>
                     <span title="Click to control device">{x.hostnames}</span>

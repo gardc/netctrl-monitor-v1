@@ -4,32 +4,69 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/Masterminds/semver"
 	"io/ioutil"
 	"net"
 	"net/http"
 	"os"
 )
 
-func GetRemoteNSAPIURL() string {
-	devMode := os.Getenv("devmode")
-	suffix := "v1"
-	if devMode == "local" {
-		return "http://localhost:8090/" + suffix
-	} else if devMode == "dev" {
-		return "https://dev.netctrl.io/" + suffix
-	} else {
-		return "https://netctrl.io/" + suffix
-	}
-}
-
-func GetIPs(ipNet net.IPNet, jwtToken string) ([]net.IP, error) {
+// DoAuthenticatedGetRequest makes a GET request to the URL <base>/api/monitorClient/{uriSuffix}.
+func DoAuthenticatedGetRequest(uriSuffix, jwt string) (*http.Response, error) {
 	client := &http.Client{}
-	req, err := http.NewRequest("GET", fmt.Sprintf("%v/ips?ip=%v", GetRemoteNSAPIURL(), ipNet.IP.To4()), nil)
+	req, err := http.NewRequest("GET", fmt.Sprintf("%s/%s", GetRemoteNSAPIURL(), uriSuffix), nil)
 	if err != nil {
 		return nil, err
 	}
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %v", jwtToken))
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %v", jwt))
+	req.Header.Set("Content-Type", "application/json")
 	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+// DoAuthenticatedPostRequest makes a POST request to the URL <base>/api/monitorClient/{uriSuffix}.
+// bodyValue will be JSON encoded automatically.
+func DoAuthenticatedPostRequest(uriSuffix, bodyValue interface{}, jwt string) (*http.Response, error) {
+	client := &http.Client{}
+	marshalled, err := json.Marshal(bodyValue)
+	if err != nil {
+		return nil, err
+	}
+	reqBody := bytes.NewBuffer(marshalled)
+	req, err := http.NewRequest("POST", fmt.Sprintf("%s/%s", GetRemoteNSAPIURL(), uriSuffix), reqBody)
+	if err != nil {
+		return nil, err
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %v", jwt))
+	req.Header.Set("Content-Type", "application/json")
+	resp, err := client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
+
+func GetRemoteAIPBaseURL() string {
+	devMode := os.Getenv("devmode")
+	if devMode == "local" {
+		return "http://localhost:3000"
+	} else if devMode == "dev" {
+		return "https://dev.netctrl.io"
+	} else {
+		return "https://netctrl.io"
+	}
+}
+
+func GetRemoteNSAPIURL() string {
+	suffix := "/api/monitorClient"
+	return GetRemoteAIPBaseURL() + suffix
+}
+
+func GetIPs(ipNet net.IPNet, jwtToken string) ([]net.IP, error) {
+	resp, err := DoAuthenticatedGetRequest(fmt.Sprintf("scanIps/%s", ipNet.IP.To4().String()), jwtToken)
 	if err != nil {
 		return nil, err
 	}
@@ -84,25 +121,14 @@ func CraftPacketRemotely(
 	arpOpcode uint16,
 	jwtToken string,
 ) ([]byte, error) {
-	client := &http.Client{}
 	reqData := ARPLayerRequest{
-		SrcMAC:    []byte(srcMAC),
-		SrcIP:     []byte(srcIP.To4()),
-		DstMAC:    []byte(dstMAC),
-		DstIP:     []byte(dstIP.To4()),
+		SrcMAC:    srcMAC,
+		SrcIP:     srcIP.To4(),
+		DstMAC:    dstMAC,
+		DstIP:     dstIP.To4(),
 		ArpOpcode: arpOpcode,
 	}
-	marshalled, err := json.Marshal(reqData)
-	if err != nil {
-		return nil, err
-	}
-	reqBody := bytes.NewBuffer(marshalled)
-	req, err := http.NewRequest("POST", fmt.Sprintf("%v/packet", GetRemoteNSAPIURL()), reqBody)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %v", jwtToken))
-	resp, err := client.Do(req)
+	resp, err := DoAuthenticatedPostRequest("createPacket", reqData, jwtToken)
 	if err != nil {
 		return nil, err
 	}
@@ -139,4 +165,36 @@ func CraftPacketRemotely(
 			return nil, fmt.Errorf("error communicating with Monitor remote API, received status %v", resp.StatusCode)
 		}
 	}
+}
+
+func UpdateAvailable(v *semver.Version) (bool, error) {
+	res, err := DoAuthenticatedGetRequest("latestVersion", "")
+	if err != nil {
+		return false, err
+	}
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return false, err
+	}
+	if res.StatusCode != 200 {
+		return false, err
+	} else {
+		type Data struct {
+			Version string `json:"version"`
+		}
+		var data Data
+		err = json.Unmarshal(body, &data)
+		if err != nil {
+			return false, err
+		}
+		latest, err := semver.NewVersion(data.Version)
+		if err != nil {
+			return false, err
+		}
+		c, _ := semver.NewConstraint(fmt.Sprintf("> %s", v.String()))
+		if c.Check(latest) {
+			return true, nil
+		}
+	}
+	return false, nil
 }

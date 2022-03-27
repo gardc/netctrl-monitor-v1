@@ -37,6 +37,7 @@ const LoginPage = () => {
     if (localStorage.getItem("rememberMe") === "true") {
       setEmail(localStorage.getItem("email"));
       setPassword(localStorage.getItem("password"));
+      setRememberMe(true);
     }
 
     // Get Information about system

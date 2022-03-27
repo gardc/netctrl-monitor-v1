@@ -11,10 +11,12 @@ import (
 )
 
 type ArpScanResult struct {
-	IP        string   `json:"ip"`
-	MAC       string   `json:"mac"`
-	Hostnames []string `json:"hostnames"`
-	Vendor    string   `json:"vendor"`
+	IPString  string           `json:"ipString"`
+	MACString string           `json:"macString"`
+	IP        net.IP           `json:"ip"`
+	MAC       net.HardwareAddr `json:"mac"`
+	Hostnames []string         `json:"hostnames"`
+	Vendor    string           `json:"vendor"`
 }
 
 var broadcastMac = net.HardwareAddr{0xff, 0xff, 0xff, 0xff, 0xff, 0xff}
@@ -90,8 +92,10 @@ func idTarget(reply network.ReceivedArpReply, results chan ArpScanResult) {
 		hostnames = []string{"unknown"}
 	}
 	res := ArpScanResult{
-		IP:        reply.IP.String(),
-		MAC:       reply.MAC.String(),
+		IP:        reply.IP.To4(),
+		MAC:       reply.MAC,
+		IPString:  reply.IP.To4().String(),
+		MACString: reply.MAC.String(),
 		Hostnames: hostnames,
 		Vendor:    <-vendorResult,
 	}

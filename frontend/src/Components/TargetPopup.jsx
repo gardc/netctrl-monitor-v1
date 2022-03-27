@@ -11,8 +11,8 @@ import UpgradeModal from "./UpgradeModal";
 const TargetPopup = ({ device, open, setOpen }) => {
   const isScanning = useSelector((state) => state.scan.isScanning);
   const isBlocking = useSelector((state) => state.block.isBlocking);
-  const gatewayIp = useSelector((state) => state.ns.settings.gatewayIp);
-  const gatewayMac = useSelector((state) => state.ns.settings.gatewayMac);
+  const gatewayIp = useSelector((state) => state.ns.settings.gateway.ip);
+  const gatewayMac = useSelector((state) => state.ns.settings.gateway.mac.string);
   const nsSettings = useSelector((state) => state.ns.settings);
   const pcapInitialized = useSelector((state) => state.ns.pcapInitialized);
   const proUser = useSelector((state) => state.user.proUser);
@@ -77,7 +77,7 @@ const TargetPopup = ({ device, open, setOpen }) => {
           </span>
         </button>
       );
-    } else if (device.ip === gatewayIp && device.mac === gatewayMac) {
+    } else if (device.ipString === gatewayIp && device.macString === gatewayMac) {
       return (
         <button
           className="px-8 py-2 bg-red-700 transition-colors rounded-md flex items-center opacity-50 focus:outline-none"
@@ -157,11 +157,11 @@ const TargetPopup = ({ device, open, setOpen }) => {
                   <div className="flex flex-col justify-between">
                     <div className="flex flex-col">
                       <DeviceDataTitle>Local IP Address</DeviceDataTitle>
-                      <DeviceDataField>{device.ip}</DeviceDataField>
+                      <DeviceDataField>{device.ipString}</DeviceDataField>
                     </div>
                     <div className="flex flex-col">
                       <DeviceDataTitle>MAC Address</DeviceDataTitle>
-                      <DeviceDataField>{device.mac}</DeviceDataField>
+                      <DeviceDataField>{device.macString}</DeviceDataField>
                     </div>
                   </div>
                   <div className="flex flex-col">

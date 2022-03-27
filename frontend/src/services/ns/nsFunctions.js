@@ -1,5 +1,11 @@
 import rStore from "../../redux/store";
-import { setPcapInitialized } from "../../redux/slices/nsSettings";
+import {
+  setGatewayIp,
+  setGatewayMacObj, setLocalIface,
+  setLocalIp,
+  setLocalIpNet,
+  setPcapInitialized
+} from "../../redux/slices/nsSettings";
 
 const store = rStore;
 
@@ -8,7 +14,7 @@ export function block(device, iface, gateway, blockSleepSeconds) {
     targetIp: device.ip,
     targetMac: device.mac,
     localIface: iface,
-    gatewayMac: gateway.mac,
+    gatewayMac: gateway.mac.bytes,
     gatewayIp: gateway.ip,
     blockSleepSeconds,
   }).then();
@@ -19,7 +25,7 @@ export function unblock(device, iface, gateway) {
     targetIp: device.ip,
     targetMac: device.mac,
     localIface: iface,
-    gatewayMac: gateway.mac,
+    gatewayMac: gateway.mac.bytes,
     gatewayIp: gateway.ip,
   }).then();
 }
@@ -44,17 +50,17 @@ export async function getGatewayIp() {
   return await window.go.main.App.GetGatewayIP();
 }
 
-export async function getGatewayMac(gatewayIp) {
-  return await window.go.main.App.LookupARPTable(gatewayIp);
+export async function lookupArpTable(ip) {
+  return await window.go.main.App.LookupARPTable(ip);
 }
 
 export async function initBackend() {
   const localIp = await getDefaultLocalIp();
   const gatewayIp = await getGatewayIp();
-  const gatewayMac = await getGatewayMac(gatewayIp);
+  const gatewayMac = await lookupArpTable(gatewayIp);
   const localIpNet = await getIpNetFromIp(localIp);
   const localIface = await getIfaceFromIp(localIp);
-  window.go.main.App.InitializePcap(localIface).then(async () => {
+  window.go.main.App.Initialize(localIface).then(async () => {
     console.log(
       "Init values: ",
       localIp,
@@ -64,9 +70,22 @@ export async function initBackend() {
       localIface
     );
     store.dispatch(setPcapInitialized(true));
+    store.dispatch(setLocalIp(localIp));
+    store.dispatch(setGatewayIp(gatewayIp));
+    store.dispatch(setGatewayMacObj(gatewayMac));
+    store.dispatch(setLocalIpNet(localIpNet));
+    store.dispatch(setLocalIface(localIface));
   });
 }
 
 export function setJWT(jwt) {
   window.go.main.App.SetJWT(jwt).then();
+}
+
+export async function getVersion() {
+  return await window.go.main.App.GetVersion();
+}
+
+export async function getMacFromString(macString) {
+  return await window.go.main.App.GetMACFromString(macString);
 }

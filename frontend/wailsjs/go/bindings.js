@@ -35,6 +35,14 @@ const go = {
         return window.go.main.App.GetIfaceFromIP(arg1);
       },
       /**
+       * GetMACFromString
+       * @param {string} arg1 - Go Type: string
+       * @returns {Promise<models.HardwareAddr>}  - Go Type: net.HardwareAddr
+       */
+      "GetMACFromString": (arg1) => {
+        return window.go.main.App.GetMACFromString(arg1);
+      },
+      /**
        * GetMachineHostname
        * @returns {Promise<string>}  - Go Type: string
        */
@@ -56,6 +64,13 @@ const go = {
         return window.go.main.App.GetOS();
       },
       /**
+       * GetVersion
+       * @returns {Promise<string>}  - Go Type: string
+       */
+      "GetVersion": () => {
+        return window.go.main.App.GetVersion();
+      },
+      /**
        * Greet
        * @param {string} arg1 - Go Type: string
        * @returns {Promise<string>}  - Go Type: string
@@ -64,17 +79,17 @@ const go = {
         return window.go.main.App.Greet(arg1);
       },
       /**
-       * InitializePcap
+       * Initialize
        * @param {models.Interface} arg1 - Go Type: net.Interface
        * @returns {Promise<void>} 
        */
-      "InitializePcap": (arg1) => {
-        return window.go.main.App.InitializePcap(arg1);
+      "Initialize": (arg1) => {
+        return window.go.main.App.Initialize(arg1);
       },
       /**
        * LookupARPTable
        * @param {models.IP} arg1 - Go Type: net.IP
-       * @returns {Promise<models.HardwareAddr>}  - Go Type: net.HardwareAddr
+       * @returns {Promise<models.MACInfo>}  - Go Type: main.MACInfo
        */
       "LookupARPTable": (arg1) => {
         return window.go.main.App.LookupARPTable(arg1);
@@ -86,6 +101,13 @@ const go = {
        */
       "Poison": (arg1) => {
         return window.go.main.App.Poison(arg1);
+      },
+      /**
+       * Quit
+       * @returns {Promise<void>} 
+       */
+      "Quit": () => {
+        return window.go.main.App.Quit();
       },
       /**
        * Scan
@@ -126,6 +148,13 @@ const go = {
        */
       "StopScan": () => {
         return window.go.main.App.StopScan();
+      },
+      /**
+       * UpdateCheck
+       * @returns {Promise<void>} 
+       */
+      "UpdateCheck": () => {
+        return window.go.main.App.UpdateCheck();
       },
     },
   },

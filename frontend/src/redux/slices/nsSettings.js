@@ -13,7 +13,10 @@ export const nsSlice = createSlice({
       localIface: null,
       gateway: {
         ip: null,
-        mac: null,
+        mac: {
+          string: null,
+          bytes: null,
+        },
       },
       scanTimeoutSeconds: 6,
       blockSleepSeconds: 1,
@@ -35,8 +38,14 @@ export const nsSlice = createSlice({
     setGatewayIp: (state, action) => {
       state.settings.gateway.ip = action.payload;
     },
-    setGatewayMac: (state, action) => {
+    setGatewayMacObj: (state, action) => {
       state.settings.gateway.mac = action.payload;
+    },
+    setGatewayMacString: (state, action) => {
+      state.settings.gateway.mac.string = action.payload;
+    },
+    setGatewayMacBytes: (state, action) => {
+      state.settings.gateway.mac.bytes = action.payload;
     },
     setScanTimeoutSeconds: (state, action) => {
       state.settings.scanTimeoutSeconds = action.payload;
@@ -58,7 +67,7 @@ export const nsSlice = createSlice({
     },
     setPcapInitialized: (state, action) => {
       state.pcapInitialized = action.payload;
-    }
+    },
   },
 });
 
@@ -68,7 +77,9 @@ export const {
   setLocalIpNet,
   setLocalIface,
   setGatewayIp,
-  setGatewayMac,
+  setGatewayMacObj,
+  setGatewayMacBytes,
+  setGatewayMacString,
   setScanTimeoutSeconds,
   setBlockSleepSeconds,
   askPassword,

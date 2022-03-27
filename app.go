@@ -3,17 +3,23 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/Masterminds/semver"
 	"github.com/google/gopacket/pcap"
 	"github.com/jackpal/gateway"
+	"github.com/pkg/browser"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"net"
 	"netctrl.io/monitor/communication"
 	"netctrl.io/monitor/identification"
 	"netctrl.io/monitor/networking/network"
 	"netctrl.io/monitor/networking/poison"
+	"netctrl.io/monitor/networking/remote"
 	"netctrl.io/monitor/networking/scan"
+	"os"
 	"time"
 )
+
+var Version, _ = semver.NewVersion("0.2.0")
 
 // App struct
 type App struct {
@@ -38,6 +44,7 @@ func (b *App) startup(ctx context.Context) {
 // domReady is called after the front-end dom has been loaded
 func (b *App) domReady(ctx context.Context) {
 	// Add your action here
+	b.UpdateCheck()
 }
 
 // shutdown is called at application termination
@@ -51,8 +58,42 @@ func (b *App) Greet(name string) string {
 }
 
 func (b *App) SetJWT(JWT string) {
-	runtime.LogInfo(b.ctx, "Called SetJWT() from frontend")
+	runtime.LogInfo(b.ctx, fmt.Sprintf("Called SetJWT() from frontend with jwt: %s", JWT))
 	b.JWT = JWT
+}
+
+func (b *App) GetVersion() string {
+	return Version.String()
+}
+
+func (b *App) Quit() {
+	os.Exit(0)
+}
+
+func (b *App) UpdateCheck() {
+	u, err := remote.UpdateAvailable(Version)
+	if err != nil {
+		runtime.LogError(b.ctx, fmt.Sprintf("Error checking for update: %v", err))
+		return
+	}
+	if !u {
+		return
+	}
+	selected, err := runtime.MessageDialog(b.ctx, runtime.MessageDialogOptions{
+		Type:          runtime.QuestionDialog,
+		Title:         "An update is available",
+		Message:       "Do you want to download the newest NetCTRL Monitor update?",
+		Buttons:       []string{"Yes", "No"},
+		DefaultButton: "Yes",
+		CancelButton:  "No",
+		Icon:          nil,
+	})
+	if err != nil {
+		runtime.LogError(b.ctx, fmt.Sprintf("Error creating update modal: %v", err))
+	}
+	if selected == "Yes" {
+		_ = browser.OpenURL(remote.GetRemoteAIPBaseURL() + "/user/download")
+	}
 }
 
 /// Machine identification:
@@ -71,13 +112,14 @@ func (b *App) GetMachineHostname() string {
 
 /// Networking:
 
-func (b *App) InitializePcap(iface net.Interface) {
+func (b *App) Initialize(iface net.Interface) {
 	runtime.LogInfo(b.ctx, "Called InitializePcap() from frontend")
 	h, err := pcap.OpenLive(iface.Name, 65536, true, pcap.BlockForever)
 	if err != nil {
 		runtime.LogError(b.ctx, err.Error())
 	}
 	b.pcapHandle = h
+	scan.InitializeOuiDb()
 	runtime.EventsEmit(b.ctx, communication.EmitTypeInitialized)
 }
 
@@ -116,13 +158,29 @@ func (b *App) GetGatewayIP() net.IP {
 	return gatewayIP
 }
 
-func (b *App) LookupARPTable(ip net.IP) net.HardwareAddr {
+type MACInfo struct {
+	Bytes  net.HardwareAddr `json:"bytes"`
+	String string           `json:"string"`
+}
+
+func (b *App) LookupARPTable(ip net.IP) MACInfo {
 	runtime.LogInfo(b.ctx, "Called LookupARPTable() from frontend")
 	mac, err := network.LookupArpTable(ip.String())
 	if err != nil {
 		runtime.LogError(b.ctx, err.Error())
 	}
-	return mac
+	return MACInfo{
+		Bytes:  mac,
+		String: mac.String(),
+	}
+}
+
+func (b *App) GetMACFromString(s string) net.HardwareAddr {
+	m, err := net.ParseMAC(s)
+	if err != nil {
+		runtime.LogError(b.ctx, fmt.Sprintf("Could not parse MAC: %s", s))
+	}
+	return m
 }
 
 // StartListening starts listening to the network to get information about other hosts on the network.
@@ -134,13 +192,14 @@ func (b *App) StartListening() {
 // It's preferred to implement new functionality that constantly listens to the network, where Scan() only
 // sends out ARP request packets.
 func (b *App) Scan(localIface net.Interface, localIPNet net.IPNet, scanTimeoutSeconds int) {
-	runtime.LogInfo(b.ctx, "Called Scan() from frontend")
+	runtime.LogInfo(b.ctx, fmt.Sprintf("Called Scan() from frontend with params: %v, %v, %v", localIface, localIPNet, scanTimeoutSeconds))
 	b.stopScanHandle = make(chan interface{})
 	results := make(chan scan.ArpScanResult)
 	scanDone := make(chan interface{})
 
 	// Start scanning
 	timeoutDur := time.Second * time.Duration(scanTimeoutSeconds)
+	runtime.LogInfo(b.ctx, fmt.Sprintf("Calling ARPScan with params: %v, %v, %v, %v, %v", b.pcapHandle, localIface, localIPNet, timeoutDur, b.JWT))
 	go scan.ARPScan(b.pcapHandle, localIface, localIPNet, timeoutDur, b.JWT, results, scanDone, b.stopScanHandle)
 
 	// Spawn receiving handler
@@ -175,6 +234,7 @@ type PoisonParams struct {
 
 // Poison poisons the device, and currently just blocks the connection.
 func (b *App) Poison(p PoisonParams) {
+	runtime.LogInfo(b.ctx, fmt.Sprintf("Called Poison() with params: %v", p))
 	// Make new stop chan
 	b.stopPoisonHandle = make(chan interface{})
 	// Call Poison
@@ -185,4 +245,5 @@ func (b *App) Poison(p PoisonParams) {
 func (b *App) StopPoison(p PoisonParams) {
 	close(b.stopPoisonHandle)
 	go poison.ResetPoison(b.pcapHandle, p.TargetIP, p.TargetMAC, p.GatewayMAC, p.GatewayIP, b.JWT)
+	runtime.EventsEmit(b.ctx, communication.EmitTypeBlockDone)
 }

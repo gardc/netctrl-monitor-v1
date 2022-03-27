@@ -27,6 +27,20 @@ export class Interface {
     }
 }
 
+export class MACInfo {
+    bytes: number[];
+    string: string;
+
+    static createFrom(source: any = {}) {
+        return new MACInfo(source);
+    }
+
+    constructor(source: any = {}) {
+        if ('string' === typeof source) source = JSON.parse(source);
+        this.bytes = source["bytes"];
+        this.string = source["string"];
+    }
+}
 export class PoisonParams {
     targetIp: number[];
     targetMac: number[];
