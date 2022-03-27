@@ -2,6 +2,7 @@ package scan
 
 import (
 	"net"
+	"netctrl.io/monitor/errors"
 	"netctrl.io/monitor/networking/network"
 	"netctrl.io/monitor/networking/remote"
 	"time"
@@ -43,7 +44,7 @@ func ARPScan(
 	// Get IPs to scan from local IP
 	ips, err := remote.GetIPs(localIP, jwtToken)
 	if err != nil {
-		panic(err)
+		errors.HandleError(err)
 		close(stopArpListener)
 		done <- struct{}{}
 		return

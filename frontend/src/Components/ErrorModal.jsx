@@ -1,12 +1,12 @@
 import React, { Fragment, useRef } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import {quit} from "../services/ns/nsFunctions";
 
 const ErrorModal = ({ children, isOpen, setIsOpen, fatal = false }) => {
   const okButtonRef = useRef(null);
 
   const exit = () => {
-    // TODO: add exit functionality
-    //appWindow.close().then();
+    quit().then();
   };
 
   return (
@@ -65,7 +65,7 @@ const ErrorModal = ({ children, isOpen, setIsOpen, fatal = false }) => {
                     onClick={fatal ? () => exit() : () => setIsOpen(false)}
                     ref={okButtonRef}
                   >
-                    Ok
+                    {fatal ? "Quit" : "Ok"}
                   </button>
                 </div>
               </div>

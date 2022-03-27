@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"net"
+	errors2 "netctrl.io/monitor/errors"
 	"runtime"
 	"strings"
 
@@ -17,8 +18,8 @@ import (
 // the channel when done.
 // Deprecated: Use GetIPs instead, which fetches from remote Monitor API.
 func IPs(n *net.IPNet) (out []net.IP) {
-	num := binary.BigEndian.Uint32([]byte(n.IP))
-	mask := binary.BigEndian.Uint32([]byte(n.Mask))
+	num := binary.BigEndian.Uint32(n.IP)
+	mask := binary.BigEndian.Uint32(n.Mask)
 	num &= mask
 	for mask < 0xffffffff {
 		var buf [4]byte
@@ -36,7 +37,10 @@ func GetLocalIP() (net.IP, error) {
 		return nil, err
 	}
 	localAddr := conn.LocalAddr().(*net.UDPAddr)
-	conn.Close()
+	err = conn.Close()
+	if err != nil {
+		return nil, err
+	}
 
 	return localAddr.IP, nil
 }
@@ -116,7 +120,7 @@ found:
 	if runtime.GOOS == "windows" {
 		devices, err := pcap.FindAllDevs()
 		if err != nil {
-			panic(err)
+			errors2.HandleFatalError(err)
 		}
 		for _, device := range devices {
 			for _, addr := range device.Addresses {

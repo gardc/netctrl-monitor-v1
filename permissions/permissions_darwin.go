@@ -11,7 +11,8 @@ func NeedsPermissions() bool {
 	out, err := cmd.Output()
 	//log.Printf("NeedsPerms out: %s\n", out)
 	if err != nil {
-		panic(err)
+		errors.HandleFatalError(err)
+		return
 	}
 	o := string(out)
 

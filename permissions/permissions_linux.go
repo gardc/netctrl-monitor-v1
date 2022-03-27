@@ -7,12 +7,13 @@ import (
 )
 
 func NeedsPermissions() bool {
-	loc:= GetAppLocation()
+	loc := GetAppLocation()
 	log.Printf("loc: %v", loc)
 	cmd := exec.Command("/usr/sbin/getcap", loc)
 	out, err := cmd.Output()
 	if err != nil {
-		panic(err)
+		errors.HandleFatalError(err)
+		return false
 	}
 	o := string(out)
 	log.Printf("needs perms out: %s", o)
@@ -32,6 +33,6 @@ func SetPermissions() bool {
 	if err != nil {
 		return false
 	}
-	
+
 	return !NeedsPermissions()
 }

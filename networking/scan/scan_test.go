@@ -44,7 +44,7 @@ func TestArpScan(t *testing.T) {
 	stop := make(chan interface{})
 	done := make(chan interface{})
 	results := make(chan ArpScanResult)
-	timeout := time.Duration(time.Second * 8)
+	timeout := time.Second * 8
 
 	localIPNet := net.IPNet{
 		IP:   localIP,

@@ -10,6 +10,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"net"
 	"netctrl.io/monitor/communication"
+	"netctrl.io/monitor/errors"
 	"netctrl.io/monitor/identification"
 	"netctrl.io/monitor/networking/network"
 	"netctrl.io/monitor/networking/poison"
@@ -44,13 +45,24 @@ func (b *App) startup(ctx context.Context) {
 
 // domReady is called after the front-end dom has been loaded
 func (b *App) domReady(ctx context.Context) {
-	// Add your action here
+	// Launch error handler
+	go b.errorHandler()
+	// Check for updates
 	b.UpdateCheck()
 }
 
 // shutdown is called at application termination
 func (b *App) shutdown(ctx context.Context) {
 	// Perform your teardown here
+}
+
+func (b *App) errorHandler() {
+	for {
+		select {
+		case appErr := <-errors.GlobalErrChan:
+			runtime.EventsEmit(b.ctx, "error", appErr)
+		}
+	}
 }
 
 // Greet returns a greeting for the given name

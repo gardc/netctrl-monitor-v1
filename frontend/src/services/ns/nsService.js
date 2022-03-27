@@ -1,6 +1,7 @@
 import { addDevice, setIsScanning } from "../../redux/slices/scanSlice";
 import rStore from "../../redux/store";
 import {setIsBlocking} from "../../redux/slices/blockSlice";
+import {addErrorLine, addFatalErrorLine} from "../../redux/slices/nsSettings";
 
 const store = rStore;
 
@@ -88,6 +89,14 @@ export const setupListeners = () => {
   //   store.dispatch(addFatalErrorLine(event.payload));
   //   console.error("Failed to spawn NS: ", event.payload);
   // });
+  window.runtime.EventsOn("error", (r) => {
+    console.log("Received error:", r);
+    if (r.fatal) {
+      store.dispatch(addErrorLine(r.error));
+    } else {
+      store.dispatch(addFatalErrorLine(r.error));
+    }
+  });
   window.runtime.EventsOn("scanResult", (r) => {
     console.log(r);
     store.dispatch(addDevice(r));

@@ -1,8 +1,8 @@
 package permissions
 
 import (
-	"testing"
 	"os"
+	"testing"
 )
 
 func TestGetAppLocation(t *testing.T) {

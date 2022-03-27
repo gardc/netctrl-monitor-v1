@@ -2,6 +2,7 @@ package poison
 
 import (
 	"net"
+	"netctrl.io/monitor/errors"
 	"netctrl.io/monitor/networking/network"
 	"netctrl.io/monitor/networking/remote"
 	"time"
@@ -30,11 +31,13 @@ func Poison(
 	// Create packets to send
 	toRouterPacket, err := remote.CraftPacketRemotely(iface.HardwareAddr, gatewayIP, targetMAC, targetIP, layers.ARPReply, jwt)
 	if err != nil {
-		panic(err)
+		errors.HandleFatalError(err)
+		return
 	}
 	toTargetPacket, err := remote.CraftPacketRemotely(iface.HardwareAddr, targetIP, gatewayMAC, gatewayIP, layers.ARPReply, jwt)
 	if err != nil {
-		panic(err)
+		errors.HandleFatalError(err)
+		return
 	}
 
 	for {
@@ -61,11 +64,13 @@ func ResetPoison(
 ) {
 	resetRouterPacket, err := remote.CraftPacketRemotely(gatewayMAC, gatewayIP, targetMAC, targetIP, layers.ARPReply, jwt)
 	if err != nil {
-		panic(err)
+		errors.HandleFatalError(err)
+		return
 	}
 	resetTargetPacket, err := remote.CraftPacketRemotely(targetMAC, targetIP, gatewayMAC, gatewayIP, layers.ARPReply, jwt)
 	if err != nil {
-		panic(err)
+		errors.HandleFatalError(err)
+		return
 	}
 
 	// Sleep for two seconds so target can digest poison before resetting poison.

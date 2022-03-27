@@ -65,6 +65,12 @@ export const nsSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
+    addErrorLine: (state, action) => {
+      if (state.error !== "") {
+        state.error += " | ";
+      }
+      state.error += action.payload;
+    },
     setPcapInitialized: (state, action) => {
       state.pcapInitialized = action.payload;
     },
@@ -85,6 +91,7 @@ export const {
   askPassword,
   addFatalErrorLine,
   setError,
+  addErrorLine,
   setPcapInitialized,
 } = nsSlice.actions;
 

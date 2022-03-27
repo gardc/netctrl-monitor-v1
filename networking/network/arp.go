@@ -2,8 +2,8 @@ package network
 
 import (
 	"bytes"
-	"log"
 	"net"
+	"netctrl.io/monitor/errors"
 
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
@@ -45,19 +45,25 @@ func CraftAndSendArpPacket(
 	}
 	buf := gopacket.NewSerializeBuffer()
 
-	gopacket.SerializeLayers(buf, opts, &eth, &arp)
+	err := gopacket.SerializeLayers(buf, opts, &eth, &arp)
+	if err != nil {
+		errors.HandleFatalError(err)
+		return
+	}
 	if err := handle.WritePacketData(buf.Bytes()); err != nil {
-		log.Fatal(err)
+		errors.HandleFatalError(err)
+		return
 	}
 }
 
-// Send a packet that has been created (remotely, probably)
+// SendPacket sends a packet that has been created (remotely, probably)
 func SendPacket(
 	handle *pcap.Handle,
 	p []byte,
 ) {
 	if err := handle.WritePacketData(p); err != nil {
-		log.Fatal(err)
+		errors.HandleFatalError(err)
+		return
 	}
 }
 
@@ -82,7 +88,7 @@ func ReadArpPackets(
 				continue
 			}
 			arp := arpLayer.(*layers.ARP)
-			if arp.Operation != layers.ARPReply || bytes.Equal([]byte(iface.HardwareAddr), arp.SourceHwAddress) {
+			if arp.Operation != layers.ARPReply || bytes.Equal(iface.HardwareAddr, arp.SourceHwAddress) {
 				// I sent this packet
 				continue
 			}
