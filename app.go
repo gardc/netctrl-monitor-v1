@@ -15,6 +15,7 @@ import (
 	"netctrl.io/monitor/networking/poison"
 	"netctrl.io/monitor/networking/remote"
 	"netctrl.io/monitor/networking/scan"
+	"netctrl.io/monitor/permissions"
 	"os"
 	"time"
 )
@@ -94,6 +95,14 @@ func (b *App) UpdateCheck() {
 	if selected == "Yes" {
 		_ = browser.OpenURL(remote.GetRemoteAIPBaseURL() + "/user/download")
 	}
+}
+
+func (b *App) NeedsPermissions() bool {
+	return permissions.NeedsPermissions()
+}
+
+func (b *App) SetPermissions() bool {
+	return permissions.SetPermissions()
 }
 
 /// Machine identification:

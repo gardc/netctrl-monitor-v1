@@ -33,3 +33,8 @@
     /* border-bottom-right-radius: 0.75rem;
     border-top-right-radius: 0.75rem; */
 }
+
+/* Disable overscroll */
+body {
+    overscroll-behavior: none;
+}

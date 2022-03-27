@@ -14,7 +14,7 @@ import { setupListeners } from "../services/ns/nsService";
 import NetworkPage from "./Network";
 import SettingsPage from "./Settings";
 import UserPage from "./User";
-import { initBackend } from "../services/ns/nsFunctions";
+import {initBackend, needsPermissions} from "../services/ns/nsFunctions";
 
 const Sidebar = (props) => {
   // Sidebar backdrop blur removed due to not working correctly on windows, and draining CPU time
@@ -112,7 +112,13 @@ const MainView = () => {
   // Setup NS
   useEffect(() => {
     setupListeners();
-    initBackend();
+    needsPermissions().then(r => {
+      if (r) {
+        setPasswordPromptOpen(true);
+      } else {
+        initBackend().then();
+      }
+    })
   }, []);
 
   useEffect(() => {

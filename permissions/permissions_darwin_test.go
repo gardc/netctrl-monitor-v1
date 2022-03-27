@@ -16,7 +16,7 @@ func TestNeedsPermissions(t *testing.T) {
 }
 
 func TestStderr(t *testing.T) {
-	cmd := exec.Command("sh", "-c", "osascript -e \"do shell script \\\"chmod 777 /dev/bpf*\\\" with administrator privileges\"")
+	cmd := exec.Command("sh", "-c", "osascript -e \"do shell script \\\"chmod 666 /dev/bpf*\\\" with administrator privileges\"")
 	o, err := cmd.CombinedOutput()
 	if err != nil {
 		t.Fatal(err)

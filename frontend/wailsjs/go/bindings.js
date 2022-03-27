@@ -95,6 +95,13 @@ const go = {
         return window.go.main.App.LookupARPTable(arg1);
       },
       /**
+       * NeedsPermissions
+       * @returns {Promise<boolean>}  - Go Type: bool
+       */
+      "NeedsPermissions": () => {
+        return window.go.main.App.NeedsPermissions();
+      },
+      /**
        * Poison
        * @param {models.PoisonParams} arg1 - Go Type: main.PoisonParams
        * @returns {Promise<void>} 
@@ -126,6 +133,13 @@ const go = {
        */
       "SetJWT": (arg1) => {
         return window.go.main.App.SetJWT(arg1);
+      },
+      /**
+       * SetPermissions
+       * @returns {Promise<boolean>}  - Go Type: bool
+       */
+      "SetPermissions": () => {
+        return window.go.main.App.SetPermissions();
       },
       /**
        * StartListening

@@ -15,10 +15,12 @@ export interface go {
 		Greet(arg1:string):Promise<string>
 		Initialize(arg1:models.Interface):Promise<void>
 		LookupARPTable(arg1:models.IP):Promise<models.MACInfo>
+		NeedsPermissions():Promise<boolean>
 		Poison(arg1:models.PoisonParams):Promise<void>
 		Quit():Promise<void>
 		Scan(arg1:models.Interface,arg2:models.IPNet,arg3:number):Promise<void>
 		SetJWT(arg1:string):Promise<void>
+		SetPermissions():Promise<boolean>
 		StartListening():Promise<void>
 		StopPoison(arg1:models.PoisonParams):Promise<void>
 		StopScan():Promise<void>

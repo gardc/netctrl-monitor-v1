@@ -89,3 +89,11 @@ export async function getVersion() {
 export async function getMacFromString(macString) {
   return await window.go.main.App.GetMACFromString(macString);
 }
+
+export async function needsPermissions() {
+  return await window.go.main.App.NeedsPermissions();
+}
+
+export async function setPermissions() {
+  return await window.go.main.App.SetPermissions();
+}
