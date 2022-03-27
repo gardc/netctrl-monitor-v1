@@ -7,16 +7,15 @@ import (
 )
 
 func NeedsPermissions() bool {
-	loc, err := GetAppLocation()
-	if err != nil {
-		panic(err)
-	}
+	loc:= GetAppLocation()
+	log.Printf("loc: %v", loc)
 	cmd := exec.Command("/usr/sbin/getcap", loc)
 	out, err := cmd.Output()
 	if err != nil {
 		panic(err)
 	}
 	o := string(out)
+	log.Printf("needs perms out: %s", o)
 	if strings.Contains(o, "= cap_net_admin,cap_net_raw+eip") || strings.Contains(o, " cap_net_admin,cap_net_raw=eip") {
 		return false
 	} else {
@@ -25,10 +24,7 @@ func NeedsPermissions() bool {
 }
 
 func SetPermissions() bool {
-	loc, err := GetAppLocation()
-	if err != nil {
-		panic(err)
-	}
+	loc := GetAppLocation()
 	cmd := exec.Command("/usr/bin/pkexec", "setcap", "cap_net_raw,cap_net_admin=eip", loc)
 	out, err := cmd.Output()
 	o := string(out)
@@ -36,9 +32,6 @@ func SetPermissions() bool {
 	if err != nil {
 		return false
 	}
-	if o != "" {
-		return false
-	} else {
-		return !NeedsPermissions()
-	}
+	
+	return !NeedsPermissions()
 }

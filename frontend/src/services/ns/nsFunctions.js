@@ -97,3 +97,11 @@ export async function needsPermissions() {
 export async function setPermissions() {
   return await window.go.main.App.SetPermissions();
 }
+
+export async function getOs() {
+  return await window.go.main.App.GetOS();
+}
+
+export async function quit() {
+  return await window.go.main.App.Quit();
+}

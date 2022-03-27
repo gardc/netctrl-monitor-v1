@@ -1,6 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useRef, useState } from "react";
-import {initBackend, setPermissions} from "../services/ns/nsFunctions";
+import {initBackend, setPermissions, getOs, quit} from "../services/ns/nsFunctions";
 
 const PasswordPopup = ({ isOpen, setIsOpen }) => {
   const [errMsg, setErrMsg] = useState("");
@@ -18,8 +18,14 @@ const PasswordPopup = ({ isOpen, setIsOpen }) => {
     // });
     setPermissions().then(r => {
       if (r === true) {
-        initBackend().then();
-        setIsOpen(false);
+        getOs().then(os => {
+          if (os === "Linux") {
+            quit().then();
+          }
+          initBackend().then();
+          setIsOpen(false);
+        })
+        
       } else {
         setErrMsg("Could not authorize. Please try again with your administrator (sudo) password, or contact support if you believe this is an error.");
       }

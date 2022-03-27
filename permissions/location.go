@@ -2,13 +2,13 @@ package permissions
 
 import (
 	"os"
-	"path/filepath"
 )
 
-func GetAppLocation() (string, error) {
-	e, err := os.Executable()
-	if err != nil {
-		return "", err
-	}
-	return filepath.Dir(e), nil
+func GetAppLocation() string {
+	// e, err := os.Executable()
+	// if err != nil {
+	// 	return "", err
+	// }
+	// return path.Dir(e), nil
+	return os.Args[0]
 }
