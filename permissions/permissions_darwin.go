@@ -1,30 +1,41 @@
 package permissions
 
+import (
+	"log"
+	"os/exec"
+	"strings"
+)
+
 func NeedsPermissions() bool {
 	cmd := exec.Command("sh", "-c", "stat -f '%A' /dev/bpf*")
 	out, err := cmd.Output()
+	//log.Printf("NeedsPerms out: %s\n", out)
 	if err != nil {
 		panic(err)
 	}
-	if out != "" {
-		return true
-	} else {
-		return false
+	o := string(out)
+
+	outSplit := strings.Split(o, "\n")
+	for _, l := range outSplit {
+		// If line is empty or isn't 777
+		if l != "" && !strings.Contains(l, "777") {
+			return true
+		}
 	}
+	return false
 }
 
-// Returns true if settings permissions was successful.
+// SetPermissions returns true if settings permissions was successful.
 func SetPermissions() bool {
-	loc, err = GetAppLocation()
-	if err != nil {
-		panic(err)
-	}
 	cmd := exec.Command("sh", "-c", "osascript -e \"do shell script \\\"chmod 777 /dev/bpf*\\\" with administrator privileges\"")
 	out, err := cmd.Output()
 	if err != nil {
+		log.Printf("Error on setperms: %v. Out: %v", err, string(out))
 		return false
 	}
-	if strings.Contains("User cancelled.") {
+	o := string(out)
+	//log.Printf("cmd out: %s", o)
+	if strings.Contains(o, "User cancelled.") {
 		return false
 	} else {
 		return !NeedsPermissions()

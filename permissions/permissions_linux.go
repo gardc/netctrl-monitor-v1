@@ -39,6 +39,6 @@ func SetPermissions() bool {
 	if o != "" {
 		return false
 	} else {
-		return true
+		return !NeedsPermissions()
 	}
 }
