@@ -5,6 +5,11 @@ import (
 	"testing"
 )
 
-func TestNeedsElevatedAccess(t *testing.T) {
+func TestSetPermissions(t *testing.T) {
+	t.Logf("Set permissions : %v", permissions.SetPermissions())
+}
+
+func TestNeedsPermissions(t *testing.T) {
 	t.Logf("Needs elevated access: %v", permissions.NeedsPermissions())
 }
+

@@ -32,7 +32,7 @@ func SetPermissions() bool {
 	cmd := exec.Command("/usr/bin/pkexec", "setcap", "cap_net_raw,cap_net_admin=eip", loc)
 	out, err := cmd.Output()
 	o := string(out)
-	log.Println(o)
+	log.Printf("SetPermissions cmd out: %s", o)
 	if err != nil {
 		return false
 	}
