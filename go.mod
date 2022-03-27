@@ -10,7 +10,7 @@ require (
 	github.com/jackpal/gateway v1.0.7
 	github.com/mostlygeek/arp v0.0.0-20170424181311-541a2129847a
 	github.com/pkg/browser v0.0.0-20210706143420-7d21f8c997e2
-	github.com/wailsapp/wails/v2 v2.0.0-beta.33
+	github.com/wailsapp/wails/v2 v2.0.0-beta.34
 )
 
 require (
