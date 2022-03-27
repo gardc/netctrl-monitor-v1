@@ -9,5 +9,5 @@ func NeedsPermissions() bool {
 }
 
 func SetPermissions() error {
-	return errors.New("Tried to elevate app on Windows.")
+	return errors.New("tried to elevate app on Windows")
 }
