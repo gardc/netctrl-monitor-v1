@@ -45,7 +45,7 @@ const NetworkPage = () => {
 
   return (
     <div className="bg-gray-800 select-none" data-tauri-drag-region="">
-      <div className="px-12 pt-12" data-tauri-drag-region="">
+      <div className="px-12 pt-12" data-wails-no-drag="">
         <h2 className="text-2xl font-bold">Your network</h2>
         <p className="mt-2 text-gray-400">
           Scan your network to see visible devices. Click on a device to control

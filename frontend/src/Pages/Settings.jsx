@@ -126,7 +126,7 @@ const SettingsPage = () => {
 
     return (
         <>
-            <div className="p-12 bg-gray-800 select-none" data-tauri-drag-region="">
+            <div className="p-12 bg-gray-800 select-none">
                 {/* Error modal */}
                 <OkModal isOpen={showErrorModal} setIsOpen={setShowErrorModal}>
                     <h3 className="text-xl font-bold">Error saving settings</h3>

@@ -1,0 +1,17 @@
+{
+  "notarize": [
+    {
+      "path": "./netctrl-monitor-darwin-amd64.zip",
+      "bundle_id": "app.monitor"
+    },
+    {
+      "path": "./netctrl-monitor-darwin-arm64.zip",
+      "bundle_id": "app.monitor"
+    }
+  ],
+
+  "apple_id": {
+    "username": "admin@netctrl.io",
+    "password": "@env:APPLE_PASSWORD"
+  }
+}

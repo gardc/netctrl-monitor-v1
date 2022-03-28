@@ -25,7 +25,6 @@ const UserPage = () => {
   return (
     <div
       className="p-12 bg-gray-800 select-none w-full h-full"
-      data-tauri-drag-region=""
     >
       <h2 className="text-2xl font-bold">My Page</h2>
       <p className="mt-2 text-gray-400">See and manage your NetCTRL account.</p>

@@ -24,7 +24,7 @@ const Sidebar = (props) => {
       className="fixed z-20 whitespace-nowrap overflow-x-hidden transition-all duration-75 w-24 hover:w-64 border-r border-gray-700 pt-12 h-full top-0 left-0 bg-gray-900 flex flex-col items-center justify-between select-none"
       onMouseEnter={() => props.setSidebarOpen(true)}
       onMouseLeave={() => props.setSidebarOpen(false)}
-      wails-drag-region=""
+      data-wails-no-drag=""
     >
       <div className="flex flex-col justify-center items-center">
         {props.sidebarOpen ? (
@@ -194,7 +194,7 @@ const MainView = () => {
           }
         />
 
-        <Routes>
+        <Routes data-wails-drag="">
           <Route path={`network`} element={<NetworkPage />} />
           <Route path={`settings`} element={<SettingsPage />} />
           <Route path={`user`} element={<UserPage />} />

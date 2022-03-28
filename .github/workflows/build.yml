@@ -1,0 +1,127 @@
+name: "create-prod-build"
+on:
+  workflow_dispatch:
+
+jobs:
+  create-release:
+    runs-on: ubuntu-latest
+    outputs:
+      RELEASE_UPLOAD_ID: ${{ steps.create_release.outputs.id }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: setup node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      - name: get version
+        run: echo "PACKAGE_VERSION=$(node -p "require('./frontend/package.json').version")" >> $GITHUB_ENV
+
+      - name: create release
+        id: create_release
+        uses: actions/create-release@v1.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: monitor-v${{ env.PACKAGE_VERSION }}
+          release_name: "Monitor prod v${{ env.PACKAGE_VERSION }}"
+          body: "See the assets to download this version and install."
+          draft: true
+          prerelease: false
+  build-monitor:
+    needs: create-release
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [ macos-latest, ubuntu-latest, windows-latest ]
+        go-version: [1.18]
+
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - uses: actions/checkout@v2
+
+      - name: setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: build frontend
+        run: |
+          cd frontend
+          yarn
+          yarn build
+
+      - name: Get Wails
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
+      - name: Install gon via HomeBrew for code signing and app notarization
+        run: |
+          brew tap mitchellh/gon
+          brew install mitchellh/gon/gon
+        if: matrix.os == 'macos-11'
+
+      - name: Build and Sign MacOS Binaries
+        env:
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+        run: |
+          ./build-macos.sh
+        if: matrix.os == 'macos-11'
+
+#      - name: Build package linux
+#        run: |
+#         export PATH=$PATH:$(go env GOPATH)/bin
+#         echo "building on ${{ matrix.os }}"
+#         echo ${{ env.GITHUB_REF }}
+#         echo ${{ env.GITHUB_HEAD_REF }}
+#         mkdir -p ~/.wails
+#         cp wails.json ~/.wails/
+#         export LOG_LEVEL=debug
+#         export GODEBUG=1
+#         wails build
+#         tar -czvf riftshare.tar.gz ./build/riftshare
+#         # wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+#         # chmod +x linuxdeploy*.AppImage
+#         # ls ./
+#         # ./linuxdeploy*.AppImage --appdir AppDir --executable ./build/riftshare --desktop-file=riftshare.AppImage.desktop --icon-file=appicon--512.png --output appimage
+#        if: matrix.os == 'ubuntu-latest'
+
+      - name: Build package windows
+        run: |
+          $GP = (go env GOPATH)
+          $env:path = "$env:path;$GP\bin"
+          echo "building on ${{ matrix.os }}"
+          choco install mingw
+          choco install nsis
+          wails build -platform windows/amd64 -clean -nsis
+        if: matrix.os == 'windows-latest'
+
+      - name: upload artifacts macOS
+        uses: actions/upload-artifact@v2
+        with:
+          name: monitor-macos
+          path: netctrl-monitor-*.zip
+        if: matrix.os == 'macos-11'
+
+      - name: upload artifact windows
+        uses: actions/upload-artifact@v2
+        with:
+          name: monitor-windows
+          path: .\build\bin\*.exe
+        if: matrix.os == 'windows-latest'
+
+#      - name: upload built to DO spaces
+#        uses: BetaHuhn/do-spaces-action@v2
+#        with:
+#          access_key: ${{ secrets.DO_ACCESS_KEY }}
+#          secret_key: ${{ secrets.DO_SECRET_KEY }}
+#          space_name: ${{ secrets.DO_SPACE_NAME }}
+#          space_region: ${{ secrets.DO_SPACE_REGION }}
+#          source: build/bin/
+#          out_dir: monitor-build/latest
+#          versioning: true

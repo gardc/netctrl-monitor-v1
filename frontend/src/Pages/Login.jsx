@@ -7,12 +7,12 @@ import remoteUrlBase from "../lib/remoteUrlBase";
 import { useDispatch } from "react-redux";
 import {
   setEmail as setUserEmail,
-  setToken,
   setProUser,
+  setToken,
 } from "../redux/slices/userSlice";
 import { unauthedFetch } from "../lib/fetcher";
 import EulaModal from "../Components/EulaModal";
-import {setJWT} from "../services/ns/nsFunctions";
+import { setJWT } from "../services/ns/nsFunctions";
 
 const LoginPage = () => {
   const [vantaEffect, setVantaEffect] = useState(0);
@@ -165,7 +165,7 @@ const LoginPage = () => {
       {/* Draggable invisible overlay */}
       <div
         className="absolute z-20 h-screen w-screen opacity-0"
-        data-tauri-drag-region=""
+        data-wails-drag=""
       />
 
       {/* Close button */}
@@ -182,7 +182,10 @@ const LoginPage = () => {
       )}
 
       {/* Card */}
-      <div className="absolute z-30 bg-gray-800 bg-opacity-70 p-8 w-96 rounded-md border border-gray-700 shadow-lg flex flex-col justify-center items-center">
+      <div
+        className="absolute z-30 bg-gray-800 bg-opacity-70 p-8 w-96 rounded-md border border-gray-700 shadow-lg flex flex-col justify-center items-center"
+        data-wails-no-drag=""
+      >
         <p className="text-xs text-gray-400 uppercase font-medium">
           NetCTRL Monitor
         </p>
