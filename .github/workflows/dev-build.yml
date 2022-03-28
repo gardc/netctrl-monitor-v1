@@ -5,11 +5,9 @@ on:
 jobs:
   package:
     strategy:
-      fail-fast: false
       matrix:
         platform: [ macos-latest, windows-latest ]
         go-version: [1.18]
-
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v2
