@@ -63,13 +63,13 @@ jobs:
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
 
       - name: Install gon via HomeBrew for code signing and app notarization
-        if: startsWith(matrix.os,'macos')
+        if: matrix.platform == 'macos-latest'
         run: |
           brew tap mitchellh/gon
           brew install mitchellh/gon/gon
 
       - name: Build and Sign MacOS Binaries
-        if: startsWith(matrix.os,'macos')
+        if: matrix.platform == 'macos-latest'
         env:
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
         run: |
@@ -95,7 +95,7 @@ jobs:
       #        if: matrix.os == 'ubuntu-latest'
 
       - name: Build package windows
-        if: startsWith(matrix.os,'windows')
+        if: matrix.platform == 'windows-latest'
         run: |
           $GP = (go env GOPATH)
           $env:path = "$env:path;$GP\bin"
@@ -106,7 +106,7 @@ jobs:
         
 
       - name: upload artifacts macOS
-        if: startsWith(matrix.os,'macos')
+        if: matrix.platform == 'macos-latest'
         uses: actions/upload-artifact@v2
         with:
           name: monitor-macos
@@ -114,7 +114,7 @@ jobs:
 
 
       - name: upload artifact windows
-        if: startsWith(matrix.os,'windows')
+        if: matrix.platform == 'windows-latest'
         uses: actions/upload-artifact@v2
         with:
           name: monitor-windows
