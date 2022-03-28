@@ -1,10 +1,10 @@
 {
-  "name": "monitor",
+  "name": "Monitor",
   "wailsjsdir": "./frontend",
   "version": "2",
   "Path": "",
   "BuildDir": "",
-  "outputfilename": "NetCTRL-Monitor.exe",
+  "outputfilename": "Monitor.exe",
   "OutputType": "",
   "Platform": "",
   "runNonNativeBuildHooks": false,
