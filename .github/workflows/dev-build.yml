@@ -4,7 +4,6 @@ on:
 
 jobs:
   build:
-    needs: create-release
     strategy:
       fail-fast: false
       matrix:
@@ -13,6 +12,11 @@ jobs:
 
     runs-on: ${{ matrix.platform }}
     steps:
+      - uses: actions/checkout@v2
+
+      - name: get version
+        run: echo "PACKAGE_VERSION=$(node -p "require('./frontend/package.json').version")" >> $GITHUB_ENV
+
       - name: Install Go
         uses: actions/setup-go@v2
         with:
