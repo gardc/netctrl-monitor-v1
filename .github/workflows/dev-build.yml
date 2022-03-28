@@ -52,6 +52,8 @@ jobs:
           node-version: 14
 
       - name: build frontend
+        env:
+          REACT_APP_NETCTRL_REMOTE_URL: "https://dev.netctrl.io"
         run: |
           cd frontend
           yarn
