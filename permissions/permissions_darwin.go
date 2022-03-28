@@ -4,6 +4,7 @@ import (
 	"log"
 	"os/exec"
 	"strings"
+	"netctrl.io/monitor/errors"
 )
 
 func NeedsPermissions() bool {
@@ -12,7 +13,7 @@ func NeedsPermissions() bool {
 	//log.Printf("NeedsPerms out: %s\n", out)
 	if err != nil {
 		errors.HandleFatalError(err)
-		return
+		return false
 	}
 	o := string(out)
 
