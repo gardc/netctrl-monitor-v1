@@ -63,17 +63,18 @@ jobs:
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
 
       - name: Install gon via HomeBrew for code signing and app notarization
+        if: startsWith(matrix.os,"macos")
         run: |
           brew tap mitchellh/gon
           brew install mitchellh/gon/gon
-        if: matrix.os == 'macos-11'
 
       - name: Build and Sign MacOS Binaries
+        if: startsWith(matrix.os,"macos")
         env:
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
         run: |
           ./build-macos.sh
-        if: matrix.os == 'macos-11'
+        
 
       #      - name: Build package linux
       #        run: |
@@ -94,6 +95,7 @@ jobs:
       #        if: matrix.os == 'ubuntu-latest'
 
       - name: Build package windows
+        if: startsWith(matrix.os,"windows")
         run: |
           $GP = (go env GOPATH)
           $env:path = "$env:path;$GP\bin"
@@ -101,21 +103,23 @@ jobs:
           choco install mingw
           choco install nsis
           wails build -platform windows/amd64 -clean -nsis
-        if: matrix.os == 'windows-latest'
+        
 
       - name: upload artifacts macOS
+        if: startsWith(matrix.os,"macos")
         uses: actions/upload-artifact@v2
         with:
           name: monitor-macos
           path: netctrl-monitor-*.zip
-        if: matrix.os == 'macos-11'
+
 
       - name: upload artifact windows
+        if: startsWith(matrix.os,"windows")
         uses: actions/upload-artifact@v2
         with:
           name: monitor-windows
           path: .\build\bin\*.exe
-        if: matrix.os == 'windows-latest'
+
 
 #      - name: upload built to DO spaces
 #        uses: BetaHuhn/do-spaces-action@v2
