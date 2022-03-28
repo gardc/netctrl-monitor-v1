@@ -3,32 +3,6 @@ on:
   workflow_dispatch:
 
 jobs:
-#  create-release:
-#    runs-on: ubuntu-latest
-#    outputs:
-#      RELEASE_UPLOAD_ID: ${{ steps.create_release.outputs.id }}
-#
-#    steps:
-#      - uses: actions/checkout@v2
-#      - name: setup node
-#        uses: actions/setup-node@v1
-#        with:
-#          node-version: 12
-#
-#      - name: get version
-#        run: echo "PACKAGE_VERSION=$(node -p "require('./frontend/package.json').version")" >> $GITHUB_ENV
-#
-#      - name: create release
-#        id: create_release
-#        uses: actions/create-release@v1.1.0
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        with:
-#          tag_name: monitor-v${{ env.PACKAGE_VERSION }}
-#          release_name: "Monitor dev v${{ env.PACKAGE_VERSION }}"
-#          body: "See the assets to download this version and install."
-#          draft: true
-#          prerelease: false
   build:
     needs: create-release
     strategy:
