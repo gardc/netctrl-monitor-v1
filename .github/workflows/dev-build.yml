@@ -48,7 +48,7 @@ jobs:
       - name: Get Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
 
-      - name: Install gon via HomeBrew for code signing and app notarization
+      - name: Download gon for code signing and app notarization
         if: matrix.platform == 'macos-latest'
         run: |
           brew install wget
@@ -62,6 +62,7 @@ jobs:
         env:
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
         run: |
+          export devmode=dev
           chmod +x ./build-macos.sh
           ./build-macos.sh
           
@@ -91,13 +92,14 @@ jobs:
         run: |
           $GP = (go env GOPATH)
           $env:path = "$env:path;$GP\bin"
+          $Env:devmode="dev"
           echo "building on ${{ matrix.os }}"
           choco install mingw
           choco install nsis
           wails build -platform windows/amd64 -clean -nsis
           
 
-      - name: Build and sign Windows binaries
+      - name: Sign Windows binaries
         if: matrix.platform == 'windows-latest'
         env:
           WIN_SIGNING_CERT_PASSWORD: ${{ secrets.WIN_SIGNING_CERT_PASSWORD }}
@@ -108,8 +110,8 @@ jobs:
           Set-Content -Path certificate\certificate.txt -Value '${{ secrets.CERTIFICATE }}'
           certutil -decode certificate\certificate.txt certificate\certificate.pfx
           echo Signing Monitor and Monitor Installer
-          "C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe" sign /fd sha256 /tr http://ts.ssl.com /f ".\certificate\certificate.pfx" /p $Env:WIN_SIGNING_CERT_PASSWORD .\build\Monitor.exe
-          "C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe" sign /fd sha256 /tr http://ts.ssl.com /f ".\certificate\certificate.pfx" /p $Env:WIN_SIGNING_CERT_PASSWORD .\build\Monitor-amd64-installer.exe
+          & 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe' sign /fd sha256 /tr http://ts.ssl.com /f ".\certificate\certificate.pfx" /p $Env:WIN_SIGNING_CERT_PASSWORD .\build\Monitor.exe
+          & 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe' sign /fd sha256 /tr http://ts.ssl.com /f ".\certificate\certificate.pfx" /p $Env:WIN_SIGNING_CERT_PASSWORD .\build\Monitor-amd64-installer.exe
 
 
       - name: upload artifacts macOS
