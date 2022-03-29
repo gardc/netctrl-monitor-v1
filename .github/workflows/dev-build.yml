@@ -45,6 +45,7 @@ jobs:
           wget https://github.com/mitchellh/gon/releases/download/v0.2.3/gon_macos.zip
           unzip ./gon_macos.zip
           rm -rf ./gon_macos.zip
+          chmod +x ./gon
 
       - name: Build and Sign MacOS Binaries
         if: matrix.platform == 'macos-latest'

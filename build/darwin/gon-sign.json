@@ -1,5 +1,5 @@
 {
-  "source" : ["./build/bin/NetCTRL-Monitor.app"],
+  "source" : ["./build/bin/Monitor.app"],
   "bundle_id" : "app.monitor",
   "apple_id": {
     "username": "admin@netctrl.io",
