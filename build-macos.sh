@@ -1,4 +1,3 @@
-export PATH=${PATH}:`go env GOPATH`/bin
 echo "building on AMD64"
 wails build -platform darwin/amd64 -clean
 echo "Signing Package"
