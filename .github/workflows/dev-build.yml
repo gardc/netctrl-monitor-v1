@@ -15,16 +15,16 @@ jobs:
       - name: get version
         run: echo "PACKAGE_VERSION=$(node -p "require('./frontend/package.json').version")" >> $GITHUB_ENV
 
-      - name: Test windows signing
-        if: matrix.platform == 'windows-latest'
-        run: |
-          echo "Creating certificate file"
-          New-Item -ItemType directory -Path certificate
-          Set-Content -Path certificate\certificate.txt -Value '${{ secrets.WIN_SIGNING_CERT }}'
-          certutil -decode certificate\certificate.txt certificate\certificate.pfx
-          echo "Signing Monitor and Monitor Installer"
-          & 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe' sign /fd sha256 /tr http://ts.ssl.com /f certificate\certificate.pfx /p '${{ secrets.WIN_SIGNING_CERT_PASSWORD }}' .\go.mod
-          & 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe' sign /fd sha256 /tr http://ts.ssl.com /f certificate\certificate.pfx /p '${{ secrets.WIN_SIGNING_CERT_PASSWORD }}' .\main.go
+#      - name: Test windows signing
+#        if: matrix.platform == 'windows-latest'
+#        run: |
+#          echo "Creating certificate file"
+#          New-Item -ItemType directory -Path certificate
+#          Set-Content -Path certificate\certificate.txt -Value '${{ secrets.WIN_SIGNING_CERT }}'
+#          certutil -decode certificate\certificate.txt certificate\certificate.pfx
+#          echo "Signing Monitor and Monitor Installer"
+#          & 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe' sign /fd sha256 /tr http://ts.ssl.com /f certificate\certificate.pfx /p '${{ secrets.WIN_SIGNING_CERT_PASSWORD }}' .\go.mod
+#          & 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe' sign /fd sha256 /tr http://ts.ssl.com /f certificate\certificate.pfx /p '${{ secrets.WIN_SIGNING_CERT_PASSWORD }}' .\main.go
 
 
       - name: Install Go
