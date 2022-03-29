@@ -34,7 +34,7 @@ jobs:
 
       - uses: actions/checkout@v2
 
-      - name: Import Code-Signing Certificates
+      - name: Import Code-Signing Certificates for macOS
         if: matrix.platform == 'macos-latest'
         uses: Apple-Actions/import-codesign-certs@v1
         with:
@@ -60,7 +60,7 @@ jobs:
       - name: Get Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
 
-      - name: Download gon for code signing and app notarization
+      - name: MacOS download gon for code signing and app notarization
         if: matrix.platform == 'macos-latest'
         run: |
           brew install wget
@@ -113,13 +113,10 @@ jobs:
 
       - name: Sign Windows binaries
         if: matrix.platform == 'windows-latest'
-        env:
-          WIN_SIGNING_CERT_PASSWORD: ${{ secrets.WIN_SIGNING_CERT_PASSWORD }}
-          WIN_SIGNING_CERT: ${{ secrets.WIN_SIGNING_CERT }}
         run: |
           echo "Creating certificate file"
           New-Item -ItemType directory -Path certificate
-          Set-Content -Path certificate\certificate.txt -Value '${{ secrets.CERTIFICATE }}'
+          Set-Content -Path certificate\certificate.txt -Value '${{ secrets.WIN_SIGNING_CERT }}'
           certutil -decode certificate\certificate.txt certificate\certificate.pfx
           echo "Signing Monitor and Monitor Installer"
           & 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe' sign /fd sha256 /tr http://ts.ssl.com /f certificate\certificate.pfx /p '${{ secrets.WIN_SIGNING_CERT_PASSWORD }}' .\build\Monitor.exe
