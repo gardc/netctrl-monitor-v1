@@ -51,6 +51,7 @@ jobs:
         env:
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
         run: |
+          chmod +x ./build-macos.sh
           ./build-macos.sh
         
 
