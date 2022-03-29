@@ -43,7 +43,7 @@ jobs:
         run: |
           curl https://github.com/mitchellh/gon/releases/download/v0.2.3/gon_macos.zip
           unzip ./gon_macos.zip
-          rm -f ./gon.zip
+          rm -f ./gon_macos.zip
 
       - name: Build and Sign MacOS Binaries
         if: matrix.platform == 'macos-latest'
