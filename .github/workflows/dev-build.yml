@@ -6,7 +6,7 @@ jobs:
   package:
     strategy:
       matrix:
-        platform: [ macos-latest ]
+        platform: [ windows-latest ]
         go-version: [1.18]
     runs-on: ${{ matrix.platform }}
     steps:
@@ -64,6 +64,8 @@ jobs:
         run: |
           chmod +x ./build-macos.sh
           ./build-macos.sh
+          
+
         
 
       #      - name: Build package linux
@@ -93,7 +95,22 @@ jobs:
           choco install mingw
           choco install nsis
           wails build -platform windows/amd64 -clean -nsis
-        
+          
+
+      - name: Build and sign Windows binaries
+        if: matrix.platform == 'windows-latest'
+        env:
+          WIN_SIGNING_CERT_PASSWORD: ${{ secrets.WIN_SIGNING_CERT_PASSWORD }}
+          WIN_SIGNING_CERT: ${{ secrets.WIN_SIGNING_CERT }}
+        run: |
+          echo Creating certificate file
+          New-Item -ItemType directory -Path certificate
+          Set-Content -Path certificate\certificate.txt -Value '${{ secrets.CERTIFICATE }}'
+          certutil -decode certificate\certificate.txt certificate\certificate.pfx
+          echo Signing Monitor and Monitor Installer
+          "C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe" sign /fd sha256 /tr http://ts.ssl.com /f ".\certificate\certificate.pfx" /p $Env:WIN_SIGNING_CERT_PASSWORD .\build\Monitor.exe
+          "C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe" sign /fd sha256 /tr http://ts.ssl.com /f ".\certificate\certificate.pfx" /p $Env:WIN_SIGNING_CERT_PASSWORD .\build\Monitor-amd64-installer.exe
+
 
       - name: upload artifacts macOS
         if: matrix.platform == 'macos-latest'
