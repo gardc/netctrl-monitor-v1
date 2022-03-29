@@ -6,7 +6,7 @@ jobs:
   package:
     strategy:
       matrix:
-        platform: [ macos-latest, windows-latest ]
+        platform: [ macos-latest ]
         go-version: [1.18]
     runs-on: ${{ matrix.platform }}
     steps:
@@ -41,9 +41,10 @@ jobs:
       - name: Install gon via HomeBrew for code signing and app notarization
         if: matrix.platform == 'macos-latest'
         run: |
-          curl https://github.com/mitchellh/gon/releases/download/v0.2.3/gon_macos.zip
+          brew install wget
+          wget https://github.com/mitchellh/gon/releases/download/v0.2.3/gon_macos.zip
           unzip ./gon_macos.zip
-          rm -f ./gon_macos.zip
+          rm -rf ./gon_macos.zip
 
       - name: Build and Sign MacOS Binaries
         if: matrix.platform == 'macos-latest'
