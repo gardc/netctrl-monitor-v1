@@ -79,7 +79,7 @@ jobs:
         if: matrix.platform == 'ubuntu-latest'
         run: |
           sudo apt-get update
-          sudo apt-get install libwebkit2gtk-4.0-dev libgtk-3-dev -y
+          sudo apt-get install libwebkit2gtk-4.0-dev libgtk-3-dev libpcap-dev -y
           wails build -platform linux/amd64
           tar -czvf monitor-deb-amd64.tar.gz ./build/bin/Monitor
 
