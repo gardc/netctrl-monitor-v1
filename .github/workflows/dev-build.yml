@@ -55,7 +55,6 @@ jobs:
         env:
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
         run: |
-          export devmode=dev
           chmod +x ./build-macos.sh
           ./build-macos.sh
 
@@ -79,21 +78,18 @@ jobs:
       - name: Build and package for Linux
         if: matrix.platform == 'ubuntu-latest'
         run: |
-          wails build
+          wails build -platform linux/amd64
           tar -czvf monitor-deb-amd64.tar.gz ./build/bin/Monitor
-          
 
-      - name: Build package windows
+      - name: Build package for Windows
         if: matrix.platform == 'windows-latest'
         run: |
           $GP = (go env GOPATH)
           $env:path = "$env:path;$GP\bin"
-          $Env:devmode="dev"
           echo "building on ${{ matrix.os }}"
           choco install mingw
           choco install nsis
           wails build -platform windows/amd64 -clean -nsis
-          
 
       - name: Sign Windows binaries
         if: matrix.platform == 'windows-latest'
