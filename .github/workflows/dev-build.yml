@@ -153,7 +153,7 @@ jobs:
           ls
           unzip ./netctrl-monitor-darwin-amd64.zip -d bin/darwin/amd64
           unzip ./netctrl-monitor-darwin-arm64.zip -d bin/darwin/arm64
-          mv ./*.exe -d bin/windows/amd64
+          mv ./*.exe bin/windows/amd64
       - name: Upload to DO spaces
         uses: BetaHuhn/do-spaces-action@v2
         with:
