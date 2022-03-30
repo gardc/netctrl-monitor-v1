@@ -26,7 +26,6 @@ jobs:
 #          & 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe' sign /fd sha256 /tr http://ts.ssl.com /f certificate\certificate.pfx /p '${{ secrets.WIN_SIGNING_CERT_PASSWORD }}' .\go.mod
 #          & 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe' sign /fd sha256 /tr http://ts.ssl.com /f certificate\certificate.pfx /p '${{ secrets.WIN_SIGNING_CERT_PASSWORD }}' .\main.go
 
-
       - name: Install Go
         uses: actions/setup-go@v2
         with:
@@ -40,7 +39,6 @@ jobs:
           p12-file-base64: ${{ secrets.APPLE_DEVELOPER_CERTIFICATE_P12_BASE64 }}
           # The password used to import the PKCS12 file.
           p12-password: ${{ secrets.APPLE_DEVELOPER_CERTIFICATE_PASSWORD }}
-
 
       - name: setup node
         uses: actions/setup-node@v2
@@ -76,9 +74,6 @@ jobs:
           export devmode=dev
           chmod +x ./build-macos.sh
           ./build-macos.sh
-          
-
-        
 
       #      - name: Build package linux
       #        run: |
@@ -159,3 +154,21 @@ jobs:
           files: |
             Monitor-*.exe
             netctrl-*.zip
+      - name: Unzip and move files for DO spaces
+        run: |
+          mkdir bin
+          echo "Directory contents:"
+          ls
+          unzip monitor-macos.zip
+          unzip monitor-windows.zip
+          unzip ./netctrl-monitor-darwin-amd64.zip -d bin/darwin/amd64
+          unzip ./netctrl-monitor-darwin-arm64.zip -d bin/darwin/arm64
+          mv ./*.exe -d bin/windows/amd64
+      - uses: BetaHuhn/do-spaces-action@v2
+        with:
+          access_key: ${{ secrets.DO_ACCESS_KEY}}
+          secret_key: ${{ secrets.DO_SECRET_KEY }}
+          space_name: ${{ secrets.DO_SPACE_NAME }}
+          space_region: ${{ secrets.DO_SPACE_REGION }}
+          source: bin
+          out_dir: monitor/dev/
