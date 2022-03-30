@@ -76,6 +76,12 @@ jobs:
       #         # ls ./
       #         # ./linuxdeploy*.AppImage --appdir AppDir --executable ./build/riftshare --desktop-file=riftshare.AppImage.desktop --icon-file=appicon--512.png --output appimage
       #        if: matrix.os == 'ubuntu-latest'
+      - name: Build and package for Linux
+        if: matrix.platform == 'ubuntu-latest'
+        run: |
+          wails build
+          tar -czvf monitor-deb-amd64.tar.gz ./build/bin/Monitor
+          
 
       - name: Build package windows
         if: matrix.platform == 'windows-latest'
@@ -106,8 +112,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: monitor-macos
-          path: netctrl-monitor-*.zip
-
+          path: monitor-*.zip
 
       - name: upload artifact windows
         if: matrix.platform == 'windows-latest'
@@ -115,6 +120,13 @@ jobs:
         with:
           name: monitor-windows
           path: .\build\bin\*.exe
+
+      - name: upload artifact ubuntu
+        if: matrix.platform == 'ubuntu-latest'
+        uses: actions/upload-artifact@v2
+        with:
+          name: monitor-ubuntu
+          path: monitor-deb-amd64.tar.gz
 
   release:
     runs-on: ubuntu-latest
@@ -134,11 +146,13 @@ jobs:
           mkdir -p bin/darwin/amd64
           mkdir -p bin/darwin/arm64
           mkdir -p bin/windows/amd64
+          mkdir -p bin/linux/amd64
           echo "Directory contents:"
           ls
-          unzip ./netctrl-monitor-darwin-amd64.zip -d bin/darwin/amd64
-          unzip ./netctrl-monitor-darwin-arm64.zip -d bin/darwin/arm64
-          mv ./*.exe bin/windows/amd64
+          unzip ./monitor-darwin-amd64.zip -d bin/darwin/amd64
+          unzip ./monitor-darwin-arm64.zip -d bin/darwin/arm64
+          cp ./*.exe bin/windows/amd64
+          cp monitor-deb-amd64.tar.gz bin/linux/amd64
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v1
@@ -146,7 +160,8 @@ jobs:
           name: Monitor dev build v${{ env.PACKAGE_VERSION }}
           files: |
             Monitor-*.exe
-            netctrl-*.zip
+            monitor-*.zip
+            monitor-*.tar.gz
 
       - name: Upload to DO spaces
         uses: BetaHuhn/do-spaces-action@v2
