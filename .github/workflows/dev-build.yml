@@ -20,14 +20,14 @@ jobs:
         with:
           go-version: ${{ matrix.go-version }}
 
-      - name: Import Code-Signing Certificates for macOS
-        if: matrix.platform == 'macos-latest'
-        uses: Apple-Actions/import-codesign-certs@v1
-        with:
-          # The certificates in a PKCS12 file encoded as a base64 string
-          p12-file-base64: ${{ secrets.APPLE_DEVELOPER_CERTIFICATE_P12_BASE64 }}
-          # The password used to import the PKCS12 file.
-          p12-password: ${{ secrets.APPLE_DEVELOPER_CERTIFICATE_PASSWORD }}
+#      - name: Import Code-Signing Certificates for macOS
+#        if: matrix.platform == 'macos-latest'
+#        uses: Apple-Actions/import-codesign-certs@v1
+#        with:
+#          # The certificates in a PKCS12 file encoded as a base64 string
+#          p12-file-base64: ${{ secrets.APPLE_DEVELOPER_CERTIFICATE_P12_BASE64 }}
+#          # The password used to import the PKCS12 file.
+#          p12-password: ${{ secrets.APPLE_DEVELOPER_CERTIFICATE_PASSWORD }}
 
       - name: setup node
         uses: actions/setup-node@v2
@@ -45,18 +45,34 @@ jobs:
       - name: Get Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
 
-      - name: MacOS install gon for code signing and app notarization
-        if: matrix.platform == 'macos-latest'
-        run: |
-          brew install mitchellh/gon/gon
+#      - name: MacOS install gon for code signing and app notarization
+#        if: matrix.platform == 'macos-latest'
+#        run: |
+#          brew install mitchellh/gon/gon
+#
+#      - name: Build and Sign MacOS Binaries
+#        if: matrix.platform == 'macos-latest'
+#        env:
+#          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+#        run: |
+#          chmod +x ./build-macos.sh
+#          ./build-macos.sh
 
-      - name: Build and Sign MacOS Binaries
+      - name: Build dev binaries for macOS without code-signing
         if: matrix.platform == 'macos-latest'
-        env:
-          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
         run: |
-          chmod +x ./build-macos.sh
-          ./build-macos.sh
+          echo "building on AMD64"
+          wails build -platform darwin/amd64 -clean
+          echo "Zipping Package"
+          ditto -c -k --keepParent ./build/bin/Monitor.app ./monitor-darwin-amd64.zip
+          echo "Cleaning up"
+          rm -rf ./build/bin/NetCTRL-Monitor.app
+          echo "building on ARM64"
+          wails build -platform darwin/arm64 -clean
+          echo "Zipping Package"
+          ditto -c -k --keepParent ./build/bin/Monitor.app ./monitor-darwin-arm64.zip
+          echo "Cleaning up"
+          rm -rf ./build/bin/Monitor.app
 
       #      - name: Build package linux
       #        run: |
