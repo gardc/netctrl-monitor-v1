@@ -172,15 +172,15 @@ jobs:
           cp ./*.exe bin/windows/amd64
           cp monitor-deb-amd64.tar.gz bin/linux/amd64
 
-      - name: Create GitHub release
-        uses: softprops/action-gh-release@v1
-        with:
-          name: Monitor dev build v${{ env.PACKAGE_VERSION }}
-          tag_name: ${{ env.PACKAGE_VERSION }}
-          files: |
-            Monitor-*.exe
-            monitor-*.zip
-            monitor-*.tar.gz
+#      - name: Create GitHub release
+#        uses: softprops/action-gh-release@v1
+#        with:
+#          name: Monitor dev build v${{ env.PACKAGE_VERSION }}
+#          tag_name: ${{ env.PACKAGE_VERSION }}
+#          files: |
+#            Monitor-*.exe
+#            monitor-*.zip
+#            monitor-*.tar.gz
 
       - name: Upload to DO spaces
         uses: BetaHuhn/do-spaces-action@v2
