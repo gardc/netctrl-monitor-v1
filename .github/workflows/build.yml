@@ -133,8 +133,10 @@ jobs:
           mkdir -p bin/linux/amd64
           echo "Directory contents:"
           ls
-          unzip ./monitor-darwin-amd64.zip -d bin/darwin/amd64
-          unzip ./monitor-darwin-arm64.zip -d bin/darwin/arm64
+#          unzip ./monitor-darwin-amd64.zip -d bin/darwin/amd64
+#          unzip ./monitor-darwin-arm64.zip -d bin/darwin/arm64
+          cp ./monitor-darwin-amd64.zip bin/darwin/amd64
+          cp ./monitor-darwin-arm64.zip bin/darwin/arm64
           cp ./*.exe bin/windows/amd64
           cp monitor-deb-amd64.tar.gz bin/linux/amd64
 
