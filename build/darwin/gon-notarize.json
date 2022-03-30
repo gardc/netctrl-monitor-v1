@@ -1,11 +1,11 @@
 {
   "notarize": [
     {
-      "path": "./netctrl-monitor-darwin-amd64.zip",
+      "path": "./monitor-darwin-amd64.zip",
       "bundle_id": "app.netctrl.monitor"
     },
     {
-      "path": "./netctrl-monitor-darwin-arm64.zip",
+      "path": "./monitor-darwin-arm64.zip",
       "bundle_id": "app.netctrl.monitor"
     }
   ],
