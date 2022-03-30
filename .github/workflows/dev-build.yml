@@ -149,8 +149,6 @@ jobs:
           mkdir bin
           echo "Directory contents:"
           ls
-          unzip monitor-macos.zip
-          unzip monitor-windows.zip
           unzip ./netctrl-monitor-darwin-amd64.zip -d bin/darwin/amd64
           unzip ./netctrl-monitor-darwin-arm64.zip -d bin/darwin/arm64
           mv ./*.exe -d bin/windows/amd64
