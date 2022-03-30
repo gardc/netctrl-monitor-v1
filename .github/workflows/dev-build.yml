@@ -146,7 +146,9 @@ jobs:
           name: monitor-macos
       - name: Unzip and move files for DO spaces
         run: |
-          mkdir bin
+          mkdir -p bin/darwin/amd64
+          mkdir -p bin/darwin/arm64
+          mkdir -p bin/windows/amd64
           echo "Directory contents:"
           ls
           unzip ./netctrl-monitor-darwin-amd64.zip -d bin/darwin/amd64
