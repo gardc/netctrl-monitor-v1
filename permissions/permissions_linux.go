@@ -4,6 +4,8 @@ import (
 	"log"
 	"os/exec"
 	"strings"
+
+	"netctrl.io/monitor/errors"
 )
 
 func NeedsPermissions() bool {

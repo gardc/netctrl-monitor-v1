@@ -3,7 +3,6 @@ package scan
 import (
 	"net"
 	"os"
-	"os/exec"
 	"runtime"
 	"testing"
 	"time"
@@ -18,12 +17,12 @@ func TestArpScan(t *testing.T) {
 	}
 	if runtime.GOOS == "linux" {
 		os.Setenv("devmode", "dev")
-		cmd := exec.Command("/usr/bin/pkexec", "setcap", "cap_net_raw,cap_net_admin=eip", os.Args[0])
-		o, err := cmd.Output()
-		t.Logf("arg0: %s\nsetcap out: %s\nsetcap err: %v\n", os.Args[0], o, err)
-		// e, err := os.Executable()
-		// t.Logf("executable: %v, err: %v\n", e, err)
-		time.Sleep(500)
+		// cmd := exec.Command("/usr/bin/pkexec", "setcap", "cap_net_raw,cap_net_admin=eip", os.Args[0])
+		// o, err := cmd.Output()
+		// t.Logf("arg0: %s\nsetcap out: %s\nsetcap err: %v\n", os.Args[0], o, err)
+		// // e, err := os.Executable()
+		// // t.Logf("executable: %v, err: %v\n", e, err)
+		// time.Sleep(500)
 	}
 
 	start := time.Now()
