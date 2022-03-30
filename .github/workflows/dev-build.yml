@@ -168,7 +168,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          name: Monitor dev build v${{ PACKAGE_VERSION }}
+          name: Monitor dev build v${{ env.PACKAGE_VERSION }}
           files: |
             Monitor-*.exe
             netctrl-*.zip
