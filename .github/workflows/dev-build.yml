@@ -15,17 +15,6 @@ jobs:
       - name: get version
         run: echo "PACKAGE_VERSION=$(node -p "require('./frontend/package.json').version")" >> $GITHUB_ENV
 
-#      - name: Test windows signing
-#        if: matrix.platform == 'windows-latest'
-#        run: |
-#          echo "Creating certificate file"
-#          New-Item -ItemType directory -Path certificate
-#          Set-Content -Path certificate\certificate.txt -Value '${{ secrets.WIN_SIGNING_CERT }}'
-#          certutil -decode certificate\certificate.txt certificate\certificate.pfx
-#          echo "Signing Monitor and Monitor Installer"
-#          & 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe' sign /fd sha256 /tr http://ts.ssl.com /f certificate\certificate.pfx /p '${{ secrets.WIN_SIGNING_CERT_PASSWORD }}' .\go.mod
-#          & 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe' sign /fd sha256 /tr http://ts.ssl.com /f certificate\certificate.pfx /p '${{ secrets.WIN_SIGNING_CERT_PASSWORD }}' .\main.go
-
       - name: Install Go
         uses: actions/setup-go@v2
         with:
@@ -56,15 +45,10 @@ jobs:
       - name: Get Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
 
-      - name: MacOS download gon for code signing and app notarization
+      - name: MacOS install gon for code signing and app notarization
         if: matrix.platform == 'macos-latest'
         run: |
           brew install mitchellh/gon/gon
-#          brew install wget
-#          wget https://github.com/mitchellh/gon/releases/download/v0.2.3/gon_macos.zip
-#          unzip ./gon_macos.zip
-#          rm -rf ./gon_macos.zip
-#          chmod +x ./gon
 
       - name: Build and Sign MacOS Binaries
         if: matrix.platform == 'macos-latest'
@@ -144,6 +128,7 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: monitor-macos
+
       - name: Unzip and move files for DO spaces
         run: |
           mkdir -p bin/darwin/amd64
@@ -154,6 +139,15 @@ jobs:
           unzip ./netctrl-monitor-darwin-amd64.zip -d bin/darwin/amd64
           unzip ./netctrl-monitor-darwin-arm64.zip -d bin/darwin/arm64
           mv ./*.exe bin/windows/amd64
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Monitor dev build v${{ env.PACKAGE_VERSION }}
+          files: |
+            Monitor-*.exe
+            netctrl-*.zip
+
       - name: Upload to DO spaces
         uses: BetaHuhn/do-spaces-action@v2
         with:
@@ -163,22 +157,3 @@ jobs:
           space_region: ${{ secrets.DO_SPACE_REGION }}
           source: bin
           out_dir: monitor/dev/
-
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          name: Monitor dev build v${{ env.PACKAGE_VERSION }}
-          files: |
-            Monitor-*.exe
-            netctrl-*.zip
-#      - name: Create Release
-#        id: create_release
-#        uses: "marvinpinto/action-automatic-releases@latest"
-#        with:
-#          title: "Monitor dev build"
-#          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-#          prerelease: false
-#          files: |
-#            Monitor-*.exe
-#            netctrl-*.zip

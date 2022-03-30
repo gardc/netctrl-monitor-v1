@@ -3,48 +3,31 @@ on:
   workflow_dispatch:
 
 jobs:
-  create-release:
-    runs-on: ubuntu-latest
-    outputs:
-      RELEASE_UPLOAD_ID: ${{ steps.create_release.outputs.id }}
-
+  package:
+    strategy:
+      matrix:
+        platform: [ windows-latest, macos-latest ]
+        go-version: [1.18]
+    runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v2
-      - name: setup node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12
 
       - name: get version
         run: echo "PACKAGE_VERSION=$(node -p "require('./frontend/package.json').version")" >> $GITHUB_ENV
 
-      - name: create release
-        id: create_release
-        uses: actions/create-release@v1.1.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: monitor-v${{ env.PACKAGE_VERSION }}
-          release_name: "Monitor prod v${{ env.PACKAGE_VERSION }}"
-          body: "See the assets to download this version and install."
-          draft: true
-          prerelease: false
-  build-monitor:
-    needs: create-release
-    strategy:
-      fail-fast: false
-      matrix:
-        platform: [ macos-latest, windows-latest ]
-        go-version: [1.18]
-
-    runs-on: ${{ matrix.platform }}
-    steps:
       - name: Install Go
         uses: actions/setup-go@v2
         with:
           go-version: ${{ matrix.go-version }}
 
-      - uses: actions/checkout@v2
+      - name: Import Code-Signing Certificates for macOS
+        if: matrix.platform == 'macos-latest'
+        uses: Apple-Actions/import-codesign-certs@v1
+        with:
+          # The certificates in a PKCS12 file encoded as a base64 string
+          p12-file-base64: ${{ secrets.APPLE_DEVELOPER_CERTIFICATE_P12_BASE64 }}
+          # The password used to import the PKCS12 file.
+          p12-password: ${{ secrets.APPLE_DEVELOPER_CERTIFICATE_PASSWORD }}
 
       - name: setup node
         uses: actions/setup-node@v2
@@ -62,68 +45,115 @@ jobs:
       - name: Get Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
 
-      - name: Install gon via HomeBrew for code signing and app notarization
+      - name: MacOS download gon for code signing and app notarization
+        if: matrix.platform == 'macos-latest'
         run: |
-          brew tap mitchellh/gon
           brew install mitchellh/gon/gon
-        if: matrix.os == 'macos-11'
 
       - name: Build and Sign MacOS Binaries
+        if: matrix.platform == 'macos-latest'
         env:
           APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
         run: |
+          export devmode=dev
+          chmod +x ./build-macos.sh
           ./build-macos.sh
-        if: matrix.os == 'macos-11'
 
-#      - name: Build package linux
-#        run: |
-#         export PATH=$PATH:$(go env GOPATH)/bin
-#         echo "building on ${{ matrix.os }}"
-#         echo ${{ env.GITHUB_REF }}
-#         echo ${{ env.GITHUB_HEAD_REF }}
-#         mkdir -p ~/.wails
-#         cp wails.json ~/.wails/
-#         export LOG_LEVEL=debug
-#         export GODEBUG=1
-#         wails build
-#         tar -czvf riftshare.tar.gz ./build/riftshare
-#         # wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
-#         # chmod +x linuxdeploy*.AppImage
-#         # ls ./
-#         # ./linuxdeploy*.AppImage --appdir AppDir --executable ./build/riftshare --desktop-file=riftshare.AppImage.desktop --icon-file=appicon--512.png --output appimage
-#        if: matrix.os == 'ubuntu-latest'
+      #      - name: Build package linux
+      #        run: |
+      #         export PATH=$PATH:$(go env GOPATH)/bin
+      #         echo "building on ${{ matrix.os }}"
+      #         echo ${{ env.GITHUB_REF }}
+      #         echo ${{ env.GITHUB_HEAD_REF }}
+      #         mkdir -p ~/.wails
+      #         cp wails.json ~/.wails/
+      #         export LOG_LEVEL=debug
+      #         export GODEBUG=1
+      #         wails build
+      #         tar -czvf riftshare.tar.gz ./build/riftshare
+      #         # wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+      #         # chmod +x linuxdeploy*.AppImage
+      #         # ls ./
+      #         # ./linuxdeploy*.AppImage --appdir AppDir --executable ./build/riftshare --desktop-file=riftshare.AppImage.desktop --icon-file=appicon--512.png --output appimage
+      #        if: matrix.os == 'ubuntu-latest'
 
       - name: Build package windows
+        if: matrix.platform == 'windows-latest'
         run: |
           $GP = (go env GOPATH)
           $env:path = "$env:path;$GP\bin"
+          $Env:devmode="dev"
           echo "building on ${{ matrix.os }}"
           choco install mingw
           choco install nsis
           wails build -platform windows/amd64 -clean -nsis
-        if: matrix.os == 'windows-latest'
+
+
+      - name: Sign Windows binaries
+        if: matrix.platform == 'windows-latest'
+        run: |
+          echo "Creating certificate file"
+          New-Item -ItemType directory -Path certificate
+          Set-Content -Path certificate\certificate.txt -Value '${{ secrets.WIN_SIGNING_CERT }}'
+          certutil -decode certificate\certificate.txt certificate\certificate.pfx
+          echo "Signing Monitor and Monitor Installer"
+          & 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe' sign /fd sha256 /tr http://ts.ssl.com /f certificate\certificate.pfx /p '${{ secrets.WIN_SIGNING_CERT_PASSWORD }}' .\build\bin\Monitor.exe
+          & 'C:/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x86/signtool.exe' sign /fd sha256 /tr http://ts.ssl.com /f certificate\certificate.pfx /p '${{ secrets.WIN_SIGNING_CERT_PASSWORD }}' .\build\bin\Monitor-amd64-installer.exe
+
 
       - name: upload artifacts macOS
+        if: matrix.platform == 'macos-latest'
         uses: actions/upload-artifact@v2
         with:
           name: monitor-macos
           path: netctrl-monitor-*.zip
-        if: matrix.os == 'macos-11'
+
 
       - name: upload artifact windows
+        if: matrix.platform == 'windows-latest'
         uses: actions/upload-artifact@v2
         with:
           name: monitor-windows
           path: .\build\bin\*.exe
-        if: matrix.os == 'windows-latest'
 
-#      - name: upload built to DO spaces
-#        uses: BetaHuhn/do-spaces-action@v2
-#        with:
-#          access_key: ${{ secrets.DO_ACCESS_KEY }}
-#          secret_key: ${{ secrets.DO_SECRET_KEY }}
-#          space_name: ${{ secrets.DO_SPACE_NAME }}
-#          space_region: ${{ secrets.DO_SPACE_REGION }}
-#          source: build/bin/
-#          out_dir: monitor-build/latest
-#          versioning: true
+  release:
+    runs-on: ubuntu-latest
+    needs: package
+    steps:
+      - name: Download Windows Package
+        uses: actions/download-artifact@v2
+        with:
+          name: monitor-windows
+      - name: Download macOS packages
+        uses: actions/download-artifact@v2
+        with:
+          name: monitor-macos
+
+      - name: Unzip and move files for DO spaces
+        run: |
+          mkdir -p bin/darwin/amd64
+          mkdir -p bin/darwin/arm64
+          mkdir -p bin/windows/amd64
+          echo "Directory contents:"
+          ls
+          unzip ./netctrl-monitor-darwin-amd64.zip -d bin/darwin/amd64
+          unzip ./netctrl-monitor-darwin-arm64.zip -d bin/darwin/arm64
+          mv ./*.exe bin/windows/amd64
+
+      - name: Make GitHub release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Monitor prod build v${{ env.PACKAGE_VERSION }}
+          files: |
+            Monitor-*.exe
+            netctrl-*.zip
+
+      - name: Upload to DO spaces
+        uses: BetaHuhn/do-spaces-action@v2
+        with:
+          access_key: ${{ secrets.DO_ACCESS_KEY}}
+          secret_key: ${{ secrets.DO_SECRET_KEY }}
+          space_name: ${{ secrets.DO_SPACE_NAME }}
+          space_region: ${{ secrets.DO_SPACE_REGION }}
+          source: bin
+          out_dir: monitor/prod/

@@ -19,7 +19,7 @@ require (
 	github.com/fasthttp/websocket v1.5.0 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.0 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
-	github.com/gofiber/fiber/v2 v2.30.0 // indirect
+	github.com/gofiber/fiber/v2 v2.31.0 // indirect
 	github.com/gofiber/websocket/v2 v2.0.19 // indirect
 	github.com/google/uuid v1.3.0 // indirect
 	github.com/imdario/mergo v0.3.12 // indirect
@@ -40,7 +40,7 @@ require (
 	github.com/valyala/fasthttp v1.34.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	golang.org/x/net v0.0.0-20220325170049-de3da57026de // indirect
-	golang.org/x/sys v0.0.0-20220328115105-d36c6a25d886 // indirect
+	golang.org/x/sys v0.0.0-20220330033206-e17cdc41300f // indirect
 )
 
 //replace github.com/wailsapp/wails/v2 => E:\dev\wails\v2
