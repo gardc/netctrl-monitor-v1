@@ -176,6 +176,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           name: Monitor dev build v${{ env.PACKAGE_VERSION }}
+          tag_name: ${{ env.PACKAGE_VERSION }}
           files: |
             Monitor-*.exe
             monitor-*.zip
