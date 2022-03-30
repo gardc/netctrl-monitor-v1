@@ -144,16 +144,6 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: monitor-macos
-      - name: Create Release
-        id: create_release
-        uses: "marvinpinto/action-automatic-releases@latest"
-        with:
-          title: "Monitor dev build"
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          prerelease: false
-          files: |
-            Monitor-*.exe
-            netctrl-*.zip
       - name: Unzip and move files for DO spaces
         run: |
           mkdir bin
@@ -164,7 +154,8 @@ jobs:
           unzip ./netctrl-monitor-darwin-amd64.zip -d bin/darwin/amd64
           unzip ./netctrl-monitor-darwin-arm64.zip -d bin/darwin/arm64
           mv ./*.exe -d bin/windows/amd64
-      - uses: BetaHuhn/do-spaces-action@v2
+      - name: Upload to DO spaces
+        uses: BetaHuhn/do-spaces-action@v2
         with:
           access_key: ${{ secrets.DO_ACCESS_KEY}}
           secret_key: ${{ secrets.DO_SECRET_KEY }}
@@ -172,3 +163,22 @@ jobs:
           space_region: ${{ secrets.DO_SPACE_REGION }}
           source: bin
           out_dir: monitor/dev/
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          name: Monitor dev build v${{ PACKAGE_VERSION }}
+          files: |
+            Monitor-*.exe
+            netctrl-*.zip
+#      - name: Create Release
+#        id: create_release
+#        uses: "marvinpinto/action-automatic-releases@latest"
+#        with:
+#          title: "Monitor dev build"
+#          repo_token: "${{ secrets.GITHUB_TOKEN }}"
+#          prerelease: false
+#          files: |
+#            Monitor-*.exe
+#            netctrl-*.zip
