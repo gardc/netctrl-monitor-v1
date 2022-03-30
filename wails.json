@@ -2,6 +2,8 @@
   "name": "Monitor",
   "wailsjsdir": "./frontend",
   "version": "2",
+  "frontend:build": "yarn build",
+  "frontend:install": "yarn",
   "Path": "",
   "BuildDir": "",
   "outputfilename": "Monitor.exe",
