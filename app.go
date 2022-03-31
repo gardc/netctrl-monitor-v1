@@ -105,7 +105,7 @@ func (b *App) UpdateCheck() {
 		runtime.LogError(b.ctx, fmt.Sprintf("Error creating update modal: %v", err))
 	}
 	if selected == "Yes" {
-		_ = browser.OpenURL(remote.GetRemoteAIPBaseURL() + "/user/download")
+		_ = browser.OpenURL(remote.APIBaseURL + "/user/download")
 	}
 }
 

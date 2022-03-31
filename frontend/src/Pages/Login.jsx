@@ -241,7 +241,7 @@ const LoginPage = () => {
                     `${remoteUrlBase()}/auth/sendPasswordReset`
                   );
                 }}
-                className="text-gray-300 hover:underline cursor-pointer focus:underline hover:text-red-500 transition focus:outline-none"
+                className="text-gray-300 text-md cursor-pointer hover:text-red-500 focus:text-red-600 transition focus:outline-none underline decoration-dotted underline-offset-4 decoration-gray-700 decoration-2"
               >
                 Forgot password?
               </button>
@@ -252,13 +252,26 @@ const LoginPage = () => {
             <input
               type="submit"
               value="Sign In"
-              className="mt-3 p-3 text-sm cursor-pointer transition bg-red-700 rounded-md hover:bg-red-600 focus:outline-none ring-0 focus:ring-2 ring-red-400 ring-opacity-50"
+              className="mt-3 p-3 text-md cursor-pointer transition bg-red-700 rounded-md hover:bg-red-600 focus:outline-none ring-0 focus:ring-2 ring-red-400 ring-opacity-50"
             />
           )) || (
             <button className="mt-3 p-3 text-sm transition bg-red-700 rounded-md focus:outline-none ring-0 focus:ring-2 ring-red-400 ring-opacity-50 disabled">
               <CgSpinnerTwoAlt className="animate-spin text-xl text-center w-full" />
             </button>
           )}
+
+          {/*Sign up button*/}
+          <button
+            className="mt-4 text-md font-medium cursor-pointer transition focus:outline-none ring-0 text-gray-200 hover:text-red-500 underline decoration-dotted underline-offset-4 decoration-gray-700 decoration-2"
+            onClick={(e) => {
+              e.preventDefault();
+              window.runtime.BrowserOpenURL(
+                `${remoteUrlBase()}/auth/signUp`
+              );
+            }}
+          >
+            Don't have an account?
+          </button>
         </form>
       </div>
     </div>

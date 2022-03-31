@@ -59,7 +59,7 @@ export default function UpgradeModal({ isOpen, setIsOpen }) {
           <ComingSoonPoint>Monitor device's network traffic</ComingSoonPoint>
           <ComingSoonPoint>Lag-device feature</ComingSoonPoint>
           <ComingSoonPoint>Edit and save device names</ComingSoonPoint>
-          <ComingSoonPoint>Intensive scan option</ComingSoonPoint>
+          <ComingSoonPoint>Automatic scans</ComingSoonPoint>
         </div>
         <p className="mt-6 text-xs text-gray-400">
           Already upgraded? Restart the app for the upgrade to take effect.

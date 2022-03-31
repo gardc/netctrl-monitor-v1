@@ -8,8 +8,9 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
-	"os"
 )
+
+var APIBaseURL = "https://netctrl.io"
 
 // DoAuthenticatedGetRequest makes a GET request to the URL <base>/api/monitorClient/{uriSuffix}.
 func DoAuthenticatedGetRequest(uriSuffix, jwt string) (*http.Response, error) {
@@ -49,20 +50,20 @@ func DoAuthenticatedPostRequest(uriSuffix, bodyValue interface{}, jwt string) (*
 	return resp, nil
 }
 
-func GetRemoteAIPBaseURL() string {
-	devMode := os.Getenv("devmode")
-	if devMode == "local" {
-		return "http://localhost:3000"
-	} else if devMode == "dev" {
-		return "https://dev.netctrl.io"
-	} else {
-		return "https://netctrl.io"
-	}
-}
+//func GetRemoteAIPBaseURL() string {
+//	devMode := os.Getenv("devmode")
+//	if devMode == "local" {
+//		return "http://localhost:3000"
+//	} else if devMode == "dev" {
+//		return "https://dev.netctrl.io"
+//	} else {
+//		return "https://netctrl.io"
+//	}
+//}
 
 func GetRemoteNSAPIURL() string {
 	suffix := "/api/monitorClient"
-	return GetRemoteAIPBaseURL() + suffix
+	return APIBaseURL + suffix
 }
 
 func GetIPs(ipNet net.IPNet, jwtToken string) ([]net.IP, error) {

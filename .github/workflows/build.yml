@@ -63,7 +63,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install libwebkit2gtk-4.0-dev libgtk-3-dev libpcap-dev -y
-          wails build -platform linux/amd64
+          wails build -platform linux/amd64 -ldflags "-s -w"
           tar -czvf monitor-deb-amd64.tar.gz ./build/bin/Monitor
 
       - name: Build package windows
@@ -74,7 +74,7 @@ jobs:
           echo "building on ${{ matrix.os }}"
           choco install mingw
           choco install nsis
-          wails build -platform windows/amd64 -clean -nsis
+          wails build -platform windows/amd64 -clean -nsis -ldflags "-s -w"
 
       - name: Sign Windows binaries
         if: matrix.platform == 'windows-latest'
