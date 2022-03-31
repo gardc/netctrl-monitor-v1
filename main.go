@@ -26,9 +26,9 @@ func main() {
 	err := wails.Run(&options.App{
 		Title:     "NetCTRL Monitor",
 		Width:     1000,
-		Height:    900,
+		Height:    750,
 		MinWidth:  900,
-		MinHeight: 680,
+		MinHeight: 650,
 		//MaxWidth:          1280,
 		//MaxHeight:         740,
 		DisableResize:     false,
