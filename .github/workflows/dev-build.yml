@@ -174,7 +174,6 @@ jobs:
 #          unzip ./monitor-darwin-amd64.zip -d bin/darwin/amd64
 #          unzip ./monitor-darwin-arm64.zip -d bin/darwin/arm64
 
-
 #      - name: Create GitHub release
 #        uses: softprops/action-gh-release@v1
 #        with:
