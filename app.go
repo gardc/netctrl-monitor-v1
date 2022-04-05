@@ -21,7 +21,7 @@ import (
 	"time"
 )
 
-var Version, _ = semver.NewVersion("0.2.0")
+var Version, _ = semver.NewVersion("0.2.1")
 
 // App struct
 type App struct {
@@ -138,6 +138,8 @@ func (b *App) Initialize(iface net.Interface) {
 	h, err := pcap.OpenLive(iface.Name, 65536, true, pcap.BlockForever)
 	if err != nil {
 		runtime.LogError(b.ctx, err.Error())
+		errors.HandleFatalError(err)
+		return
 	}
 	b.pcapHandle = h
 	scan.InitializeOuiDb()

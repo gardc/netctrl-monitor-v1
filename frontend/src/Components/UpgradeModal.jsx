@@ -53,9 +53,16 @@ export default function UpgradeModal({ isOpen, setIsOpen }) {
         </p>
         <div className="flex flex-col mt-2 justify-start items-start">
           <BulletPoint>Unlimited network scans</BulletPoint>
-          <BulletPoint>Access to the <span className="px-1.5 py-0.5 rounded-md bg-red-600 bg-opacity-75">Block connection</span> feature</BulletPoint>
+          <BulletPoint>
+            Access to the{" "}
+            <span className="px-1.5 py-0.5 rounded-md bg-red-600 bg-opacity-75">
+              Block connection
+            </span>{" "}
+            feature
+          </BulletPoint>
           <BulletPoint>Unlimited access to all Monitor features</BulletPoint>
           <BulletPoint>Up to 3 devices with access to Monitor</BulletPoint>
+          <BulletPoint>Be the first to get new features, like:</BulletPoint>
           <ComingSoonPoint>Monitor device's network traffic</ComingSoonPoint>
           <ComingSoonPoint>Lag-device feature</ComingSoonPoint>
           <ComingSoonPoint>Edit and save device names</ComingSoonPoint>
@@ -69,10 +76,12 @@ export default function UpgradeModal({ isOpen, setIsOpen }) {
         <div className="flex justify-end">
           <GrayButton onClick={() => setIsOpen(false)}>Close</GrayButton>
           <RedButton
-            onClick={() => window.runtime.BrowserOpenURL(`${remoteUrlBase()}/user/upgrade`)}
+            onClick={() =>
+              window.runtime.BrowserOpenURL(`${remoteUrlBase()}/user/upgrade`)
+            }
             ref={initFocusRef}
           >
-            Check it out!
+            Go Pro
           </RedButton>
         </div>
       </div>

