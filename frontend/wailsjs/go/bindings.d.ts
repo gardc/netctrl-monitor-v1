@@ -2,7 +2,7 @@ import * as models from './models';
 
 export interface go {
   "main": {
-    "models.App": {
+    "App": {
 		GetDefaultLocalIP():Promise<models.IP>
 		GetGatewayIP():Promise<models.IP>
 		GetIPNetFromIP(arg1:models.IP):Promise<models.IPNet>
