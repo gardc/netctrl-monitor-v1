@@ -1,10 +1,11 @@
-package scan
+package identify
 
 import (
 	_ "embed"
 	"errors"
-	"github.com/gardc/go-ouitools"
 	"net"
+
+	ouidb "github.com/gardc/go-ouitools"
 	errors2 "netctrl.io/monitor/errors"
 )
 
