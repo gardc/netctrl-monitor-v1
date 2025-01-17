@@ -5,7 +5,7 @@
 
 NetCTRL Monitor was my first real and big passion project / side project a couple of years ago. Even though I thought it could end up as a pretty impressive and feature-rich v2 with some work, and it still might, it never reached that point and the project died as a result.
 
-P.S. **Thank you** to all the people who believed in the project and paid for NetCTRL Monitor!
+P.S. **Thank you** to all the people who believed in the project and supported NetCTRL Monitor!
 Also, beware this was my first project in Go, and the mantra was quick 'n dirty due to the limited time between work, university and life, so the code might not be top notch.
 
 ## ❓ What is it?
